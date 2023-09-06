@@ -7,14 +7,14 @@ class Review(models.Model):
 
     # These are the foreign keys for the users who write the reviews and the movies that the reviews are about
 
-    user_id = models.ForeignKey(
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE  # This means that if the user is deleted, the reviews are too. This will make data
                                   # compliance laws easier to follow (if the user deletes their account, they probably
                                   # want all their data deleted too)
     )
 
-    movie_id = models.ForeignKey(
+    movie = models.ForeignKey(
         'movie.Movie',
         on_delete=models.CASCADE  # this means that if the movie is deleted, the reviews for it will be too.
     )
