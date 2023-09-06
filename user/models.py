@@ -7,7 +7,11 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
 
-    # The user should not be an admin by default
+    # This implementation has been chosen over the is_staff built in functionality because I plan to disable all the
+    # admin dashboards and special features. The only special thing the admin should be able to do is delete other
+    # users' reviews. This will be easier to implement with a custom field (as opposed to preventing a staff user from
+    # using the other built in tools
+
     is_admin = models.BooleanField(default=False)
 
 
