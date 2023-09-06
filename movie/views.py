@@ -14,3 +14,6 @@ def index(request):
     }
 
     return render(request, template_path, context)
+
+def display(request, id):
+    return HttpResponse("hello!")
