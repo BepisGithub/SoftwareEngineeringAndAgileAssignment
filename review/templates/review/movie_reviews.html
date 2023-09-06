@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reviews for {{movie.title}}</title>
+</head>
+<body>
+    <h1>Reviews for {{movie.title}}</h1>
+    {% if reviews %}
+        <h2>This movie has an average rating of {{movie.average_rating_out_of_five}}</h2>
+        {% for review in reviews %}
+            <p>
+                {{review}}
+            </p>
+        {% endfor %}
+    {% else %}
+        <p>There are currently no reviews for this movie! Be the first to write one!</p>
+    {% endif %}
+</body>
+</html>
