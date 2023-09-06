@@ -18,9 +18,11 @@ def index(request):
 
 def display(request, id):
     movie = get_object_or_404(Movie, id=id)
+    has_reviews = movie.review_set.all().exists()
     template_path = 'movie/display.html'
     context = {
-        'movie': movie
+        'movie': movie,
+        'has_reviews': has_reviews
     }
 
     return render(request, template_path, context)

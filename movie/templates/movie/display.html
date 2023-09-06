@@ -9,10 +9,10 @@
     <p>Description: {{movie.description}}</p>
     <p>Released on: {{movie.date_released}}</p>
     <p>Duration: {{movie.duration}}</p>
-    {% if movie.average_rating_out_of_five is None %}
-        <h2>This movie currently has no ratings! Be the first to review it!</h2>
-    {% else %}
+    {% if has_reviews %}
         <h2>Average rating out of 5: {{movie.average_rating_out_of_five}}</h2>
+    {% else %}
+        <h2>This movie currently has no ratings! Be the first to review it!</h2>
     {% endif %}
 
 </body>
