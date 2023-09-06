@@ -7,15 +7,17 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
 
-    # This implementation has been chosen over the is_staff built in functionality because I plan to disable all the
-    # admin dashboards and special features. The only special thing the admin should be able to do is delete other
-    # users' reviews. This will be easier to implement with a custom field (as opposed to preventing a staff user from
-    # using the other built in tools
-
-    is_admin = models.BooleanField(default=False)
-
+    # These inbuilt Django attributes are being removed because the only special behaviour I want from admins
+    # is that they can delete any review, this will be easier to implement by disabling all other admin
+    # tools (like the dashboard) and creating a custom field instead
     is_superuser = None
     is_staff = None
+
+    # This custom field is being used instead of Django's built-in groups/permissions system because the scope of
+    # this application is small and no other groups will be needed, unlike a real, production-level application that
+    # may change and evolve
+    is_admin = models.BooleanField(default=False)
+
 
 
 
