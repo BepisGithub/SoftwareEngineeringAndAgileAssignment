@@ -21,8 +21,8 @@ class Movie(models.Model):
     average_rating_out_of_five = models.FloatField(null=True, blank=True)
 
     def __str__(self):
-        return "title: " + self.title + " description: "\
-               + self.description + " duration: " + str(self.duration) + " date_release: " + str(self.date_released) + \
+        return "title: " + str(self.title) + " description: "\
+               + str(self.description) + " duration: " + str(self.duration) + " date_release: " + str(self.date_released) + \
                " average rating out of five: " + str(self.average_rating_out_of_five)
 
     # Django by default appends the app name before the class name for the table title, this statement
