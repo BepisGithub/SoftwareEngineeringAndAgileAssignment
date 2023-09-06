@@ -11,6 +11,7 @@
     <p>Duration: {{movie.duration}}</p>
     {% if has_reviews %}
         <h2>Average rating out of 5: {{movie.average_rating_out_of_five}}</h2>
+        <a href="/movies/{{movie.id}}/reviews">See all reviews here!</a>
     {% else %}
         <h2>This movie currently has no ratings! Be the first to review it!</h2>
     {% endif %}
