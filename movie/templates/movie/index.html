@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>See All Movies</title>
+</head>
+<body>
+    <h1>Movies</h1>
+    <ul>
+    {% for movie in movies%}
+        <li><a href="/reviews/{{movie.id}}">{{movie.title}}</a></li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
