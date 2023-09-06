@@ -15,10 +15,10 @@ class Movie(models.Model):
     duration = models.DurationField()
 
     # The time that a movie was released is unnecessary to store, hence only the date is stored
-    dateReleased = models.DateField()
+    date_released = models.DateField()
 
     # This will be calculated according to the ratings from the review table
-    averageRatingOutOfFive = models.FloatField()
+    average_rating_out_of_five = models.FloatField()
 
     # Django by default appends the app name before the class name for the table title, this statement
     # renames the table for a cleaner naming convention (so the table is called Movie instead of movie_movie)
