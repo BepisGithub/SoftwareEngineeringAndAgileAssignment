@@ -36,7 +36,7 @@ AUTH_USER_MODEL = "user.User"
 INSTALLED_APPS = [
     'movie.apps.MovieConfig',
     'user.apps.UserConfig',
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
