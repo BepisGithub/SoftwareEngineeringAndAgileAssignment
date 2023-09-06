@@ -20,6 +20,11 @@ class Movie(models.Model):
     # This will be calculated according to the ratings from the review table, so we will set the initial value to null
     average_rating_out_of_five = models.FloatField(null=True, blank=True)
 
+    def __str__(self):
+        return "title: " + self.title + " description: "\
+               + self.description + " duration: " + str(self.duration) + " date_release: " + str(self.date_released) + \
+               " average rating out of five: " + str(self.average_rating_out_of_five)
+
     # Django by default appends the app name before the class name for the table title, this statement
     # renames the table for a cleaner naming convention (so the table is called Movie instead of movie_movie)
     class Meta:
