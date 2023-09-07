@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>See All Movies</title>
-</head>
-<body>
+{% extends 'movie/base.html' %}
+{% block title %} See All Movies {% endblock %}
+
+
+{% block body %}
+
     <h1>Movies</h1>
     <ul>
     {% for movie in movies%}
         <li><a href="{% url 'display' movie.id %}">{{movie.title}}</a></li>
     {% endfor %}
     </ul>
-</body>
-</html>
+{% endblock %}

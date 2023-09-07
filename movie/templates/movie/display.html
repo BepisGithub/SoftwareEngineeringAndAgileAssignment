@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{movie.title}}}</title>
-</head>
-<body>
+{% extends 'movie/base.html' %}
+
+{% block title %} {{movie.title}} {% endblock %}
+
+{% block body %}
     <h1>{{movie.title}}</h1>
     <p>Description: {{movie.description}}</p>
     <p>Released on: {{movie.date_released}}</p>
@@ -15,6 +13,4 @@
     {% else %}
         <h2>This movie currently has no ratings! Be the first to review it!</h2>
     {% endif %}
-
-</body>
-</html>
+{% endblock %}
