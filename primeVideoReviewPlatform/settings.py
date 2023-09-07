@@ -31,6 +31,18 @@ ALLOWED_HOSTS = []
 # Use custom user definition
 AUTH_USER_MODEL = "user.User"
 
+# not sure if this is needed TODO: check
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend'
+]
+
+# Go home after logging in
+LOGIN_REDIRECT_URL = '/'
+
+# Go home after logging out
+LOGOUT_REDIRECT_URL = '/'
+
+
 # Application definition
 
 INSTALLED_APPS = [
