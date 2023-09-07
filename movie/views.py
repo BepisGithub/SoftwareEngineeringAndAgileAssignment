@@ -3,26 +3,21 @@ from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
 from .models import Movie
+from django.views import generic
 
 
-def index(request):
-    # TODO: add pagination
-    movies = Movie.objects.all()
-    template_path = 'movie/index.html'
-    context = {
-        'movies': movies
-    }
-
-    return render(request, template_path, context)
+class MovieListView(generic.ListView):
+    model = Movie
+    template_name = 'movie/index.html'
+    context_object_name = 'movies'
 
 
-def display(request, id):
-    movie = get_object_or_404(Movie, id=id)
-    has_reviews = movie.review_set.all().exists()
-    template_path = 'movie/display.html'
-    context = {
-        'movie': movie,
-        'has_reviews': has_reviews
-    }
+class MovieDetailView(generic.DetailView):
+    model = Movie
+    template_name = 'movie/display.html'
+    context_object_name = 'movie'
 
-    return render(request, template_path, context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['has_reviews'] = self.object.review_set.all().exists()
+        return context
