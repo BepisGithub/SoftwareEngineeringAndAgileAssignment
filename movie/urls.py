@@ -5,5 +5,5 @@ from . import views
 urlpatterns = [
     path('', views.MovieListView.as_view(), name='index'),
     path('movies/<int:pk>', views.MovieDetailView.as_view(), name='display'),
-    path('<int:id>/reviews', include('review.urls'))
+    path('<int:pk>/reviews', include('review.urls'))
 ]
