@@ -2,6 +2,7 @@
 {% block title %} Reviews for {{movie.title}} {% endblock %}
 {% block body %}
     <h1>Reviews for {{movie.title}}</h1>
+<!--  This view should only be called if the reviews exist, so maybe this if isn't necessary TODO: confirm  -->
     {% if reviews.exists %}
         <h2>This movie has an average rating of {{movie.average_rating_out_of_five}}</h2>
         {% for review in reviews %}
@@ -9,9 +10,14 @@
                 {{review}}
             </p>
         {% endfor %}
-        <p>Want to add your own review?
-            <a href="{% url 'review:create_movie_review' movie.id %}">Write one here!</a>
-        </p>
+<!-- TODO: fix the repetition below. in both display.html and here we're doing a check for the exact same thing-->
+        {% if user.is_authenticated %}
+            <p>Want to add your own review?
+                <a href="{% url 'review:create_movie_review' movie.id %}">Write one here!</a>
+            </p>
+        {% else %}
+                <p><a href="{% url 'login' %}">Login</a> to submit a review!</p>
+        {% endif %}
     {% else %}
         <p>There are currently no reviews for this movie!
             <a href="{% url 'review:create_movie_review' movie.id %}">Be the first to write one!</a>
