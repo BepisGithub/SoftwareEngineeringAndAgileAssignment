@@ -11,6 +11,8 @@
         <h2>Average rating out of 5: {{movie.average_rating_out_of_five}}</h2>
         <a href="{% url 'review:movie_reviews' movie.id %}">See all reviews here!</a>
     {% else %}
-        <h2>This movie currently has no ratings! Be the first to review it!</h2>
+        <h2>This movie currently has no ratings!
+            <a href="{% url 'review:movie_reviews' movie.id %}"> Be the first to review it!</a>
+        </h2>
     {% endif %}
 {% endblock %}
