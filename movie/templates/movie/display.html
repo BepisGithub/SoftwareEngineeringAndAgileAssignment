@@ -12,7 +12,7 @@
         <a href="{% url 'review:movie_reviews' movie.id %}">See all reviews here!</a>
     {% else %}
         <h2>This movie currently has no ratings!
-            <a href="{% url 'review:movie_reviews' movie.id %}"> Be the first to review it!</a>
+            <a href="{% url 'review:create_movie_review' movie.id %}"> Be the first to review it!</a>
         </h2>
     {% endif %}
 {% endblock %}

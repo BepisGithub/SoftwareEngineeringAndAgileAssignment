@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %} Create review {% endblock %}
+
+{% block body %}
+    <h2>Create review for {{movie.title}}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create review</button>
+    </form>
+{% endblock %}

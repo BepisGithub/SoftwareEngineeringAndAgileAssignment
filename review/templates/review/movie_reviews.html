@@ -9,7 +9,12 @@
                 {{review}}
             </p>
         {% endfor %}
+        <p>Want to add your own review?
+            <a href="{% url 'review:create_movie_review' movie.id %}">Write one here!</a>
+        </p>
     {% else %}
-        <p>There are currently no reviews for this movie! Be the first to write one!</p>
+        <p>There are currently no reviews for this movie!
+            <a href="{% url 'review:create_movie_review' movie.id %}">Be the first to write one!</a>
+        </p>
     {% endif %}
 {% endblock %}

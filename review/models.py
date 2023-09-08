@@ -35,7 +35,7 @@ class Review(models.Model):
         ]
     )
 
-    date_posted = models.DateTimeField()
+    date_posted = models.DateTimeField(auto_now_add=True)
 
     # This should be blank until the review has been edited at least once
     date_last_edited = models.DateTimeField(null=True, blank=True)
