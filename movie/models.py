@@ -1,3 +1,4 @@
+from django.core.validators import DecimalValidator
 from django.db import models
 
 
@@ -18,7 +19,13 @@ class Movie(models.Model):
     date_released = models.DateField()
 
     # This will be calculated according to the ratings from the review table, so we will set the initial value to null
-    average_rating_out_of_five = models.FloatField(null=True, blank=True)
+    average_rating_out_of_five = models.DecimalField(
+        null=True,
+        blank=True,
+        decimal_places=1,
+        max_digits=2,
+        validators=[DecimalValidator(max_digits=2, decimal_places=1)]
+    )
 
     def __str__(self):
         return "title: " + str(self.title) + " description: "\
