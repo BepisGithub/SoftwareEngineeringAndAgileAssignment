@@ -26,13 +26,9 @@ class ReviewDetailView(generic.DetailView):
     model = Review
     template_name = 'review/display.html'
 
-    # Class level object to hold the movie called in the get_object method to prevent a duplicate call in
-    # the get_context_data method
-    movie = None
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['movie'] = self.movie
+        context['movie'] = get_object_or_404(Movie, pk=self.kwargs['pk'])
         return context
 
     def get_object(self, queryset=None):
