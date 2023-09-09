@@ -81,10 +81,11 @@ class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
     def get_object(self, queryset=None):
         movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
         review = movie.review_set.all()[self.kwargs['review_id'] - 1]
+        if self.request.user != review.user and not self.request.user.is_admin:
+            raise PermissionError("You are not authorised to do that!")
         return review
 
     def form_valid(self, form):
-
         form.save()
         response = super().form_valid(form)
 
@@ -107,9 +108,12 @@ class ReviewDeleteView(LoginRequiredMixin, generic.DeleteView):
     def get_object(self, queryset=None):
         movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
         review = movie.review_set.all()[self.kwargs['review_id'] - 1]
+        if self.request.user != review.user and not self.request.user.is_admin:
+            raise PermissionError("You are not authorised to do that!")
         return review
 
     def form_valid(self, form):
+
         response = super().form_valid(form)
 
         # TODO: make this a helper method since we will call this also for updating and deleting reviews
