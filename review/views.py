@@ -10,6 +10,7 @@ from django.views import generic
 
 class ReviewListView(generic.ListView):
     model = Review
+    # TODO: refactor all template names to have a consistent naming convention across apps
     template_name = 'review/movie_reviews.html'
     context_object_name = 'reviews'
 
@@ -17,6 +18,17 @@ class ReviewListView(generic.ListView):
         context = super().get_context_data(**kwargs)
         context['movie'] = get_object_or_404(Movie, id=self.kwargs['pk'])
         context['reviews'] = context['reviews'].filter(movie_id=self.kwargs['pk'])
+        return context
+
+
+class ReviewDetailView(generic.DetailView):
+    model = Review
+    template_name = 'review/display.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['movie'] = get_object_or_404(Movie, pk=self.kwargs['pk'])
+        context['review'] = context['movie'].review_set.all()[self.kwargs['review_id'] - 1]
         return context
 
 
