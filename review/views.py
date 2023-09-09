@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
+from django.db.models import Avg
 
 from movie.models import Movie
 from .models import Review
@@ -56,5 +57,13 @@ class ReviewCreateView(LoginRequiredMixin, generic.CreateView):
         form.instance.user = self.request.user
         form.instance.movie = get_object_or_404(Movie, id=self.kwargs['pk'])
         form.save()
-        return super().form_valid(form)
+        response = super().form_valid(form)
 
+        # Updating the movie's average rating upon review creation
+        # TODO: make this a helper method since we will call this also for updating and deleting reviews
+        movie = form.instance.movie
+        updated_average_rating = Review.objects.filter(movie=movie).aggregate(
+            Avg('rating_out_of_five'))['rating_out_of_five__avg']
+        movie.average_rating_out_of_five = updated_average_rating
+        movie.save()
+        return response
