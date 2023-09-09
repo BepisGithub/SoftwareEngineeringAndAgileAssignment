@@ -7,7 +7,7 @@
         <h2>This movie has an average rating of {{movie.average_rating_out_of_five}}</h2>
         {% for review in reviews %}
             <p>
-                {{review}}
+                {{review}} <a href="{% url 'review:display' movie.id forloop.counter %}">Read more</a>
             </p>
         {% endfor %}
 <!-- TODO: fix the repetition below. in both display.html and here we're doing a check for the exact same thing-->
