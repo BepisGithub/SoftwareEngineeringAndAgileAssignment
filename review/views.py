@@ -96,3 +96,15 @@ class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
         movie.average_rating_out_of_five = updated_average_rating
         movie.save()
         return response
+
+
+class ReviewDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Review
+
+    def get_success_url(self):
+        return reverse_lazy('review:movie_reviews', kwargs={'pk': self.kwargs['pk']})
+
+    def get_object(self, queryset=None):
+        movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
+        review = movie.review_set.all()[self.kwargs['review_id'] - 1]
+        return review

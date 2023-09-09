@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %} Create review {% endblock %}
+
+{% block body %}
+    <h2>Are you sure you want to delete your review for {{review.movie.title}}</h2>
+    <p>{{review}}</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, I'm sure</button>
+    </form>
+{% endblock %}
