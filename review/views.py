@@ -29,6 +29,7 @@ class ReviewDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['movie'] = get_object_or_404(Movie, pk=self.kwargs['pk'])
+        context['review_index'] = self.kwargs['review_id']
         return context
 
     def get_object(self, queryset=None):

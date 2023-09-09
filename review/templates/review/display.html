@@ -5,4 +5,5 @@
 {% block body %}
     <h1>Review for {{movie.title}}</h1>
     <p>{{review}}</p>
+    <a href="{% url 'review:update' movie.id review_index %}">Update here</a>
 {% endblock %}
