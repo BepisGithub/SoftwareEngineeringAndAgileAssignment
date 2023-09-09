@@ -108,3 +108,16 @@ class ReviewDeleteView(LoginRequiredMixin, generic.DeleteView):
         movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
         review = movie.review_set.all()[self.kwargs['review_id'] - 1]
         return review
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        # TODO: make this a helper method since we will call this also for updating and deleting reviews
+        movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
+        updated_average_rating = Review.objects.filter(movie=movie).aggregate(
+            Avg('rating_out_of_five'))['rating_out_of_five__avg']
+        movie.average_rating_out_of_five = updated_average_rating
+        movie.save()
+        return response
+
+
