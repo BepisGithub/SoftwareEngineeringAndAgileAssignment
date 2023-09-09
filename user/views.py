@@ -2,6 +2,7 @@ from django.contrib.auth import login
 from django.shortcuts import render, redirect
 from .forms import UserRegistrationForm
 
+# TODO: add a forgot account/forgot details option
 
 def register(request):
     if request.method == 'POST':

@@ -5,6 +5,11 @@
 {% block body %}
     <h1>Review for {{movie.title}}</h1>
     <p>{{review}}</p>
-    <a href="{% url 'review:update' movie.id review_index %}">Update here</a>
-    <a href="{% url 'review:delete' movie.id review_index %}">Delete here</a>
+    {% if user == review.user%}
+        <a href="{% url 'review:update' movie.id review_index %}">Update here</a>
+        <a href="{% url 'review:delete' movie.id review_index %}">Delete here</a>
+    {% endif %}
+    {% if user.is_admin %}
+        <a href="{% url 'review:delete' movie.id review_index %}">Delete here</a>
+    {% endif %}
 {% endblock %}
