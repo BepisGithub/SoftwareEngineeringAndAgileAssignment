@@ -36,6 +36,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
 
+# TODO: see if theres an option to just redirect you where you were before
 # Go home after logging in
 LOGIN_REDIRECT_URL = '/'
 
