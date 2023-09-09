@@ -63,3 +63,35 @@ class ReviewCreateView(LoginRequiredMixin, generic.CreateView):
         movie.average_rating_out_of_five = updated_average_rating
         movie.save()
         return response
+
+
+class ReviewUpdateView(generic.UpdateView):
+    model = Review
+    fields = ['title', 'message', 'rating_out_of_five']
+
+    def get_success_url(self):
+        return reverse_lazy('review:movie_reviews', kwargs={'pk': self.kwargs['pk']})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['movie'] = get_object_or_404(Movie, pk=self.kwargs['pk'])
+        return context
+
+    def get_object(self, queryset=None):
+        movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
+        review = movie.review_set.all()[self.kwargs['review_id'] - 1]
+        return review
+
+    def form_valid(self, form):
+
+        form.save()
+        response = super().form_valid(form)
+
+        # Updating the movie's average rating upon review creation
+        # TODO: make this a helper method since we will call this also for updating and deleting reviews
+        movie = form.instance.movie
+        updated_average_rating = Review.objects.filter(movie=movie).aggregate(
+            Avg('rating_out_of_five'))['rating_out_of_five__avg']
+        movie.average_rating_out_of_five = updated_average_rating
+        movie.save()
+        return response
