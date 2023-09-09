@@ -65,7 +65,7 @@ class ReviewCreateView(LoginRequiredMixin, generic.CreateView):
         return response
 
 
-class ReviewUpdateView(generic.UpdateView):
+class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Review
     fields = ['title', 'message', 'rating_out_of_five']
 
