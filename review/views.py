@@ -39,7 +39,6 @@ class ReviewDetailView(generic.DetailView):
         return review
 
 
-# TODO: enforce the user only being able to create one review per movie
 class ReviewCreateView(LoginRequiredMixin, generic.CreateView):
     model = Review
     fields = ['title', 'message', 'rating_out_of_five']
@@ -56,6 +55,11 @@ class ReviewCreateView(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.instance.movie = get_object_or_404(Movie, id=self.kwargs['pk'])
+        review_already_exists = Review.objects.filter(user=self.request.user, movie=form.instance.movie).exists()
+        print(review_already_exists)
+        if review_already_exists:
+            raise PermissionError("You have already written a review for this movie")
+
         form.save()
         response = super().form_valid(form)
 
