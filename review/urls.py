@@ -4,6 +4,7 @@ from . import views
 
 app_name = 'review'
 
+# TODO: improve the front end by using some CSS
 urlpatterns = [
     path('', views.ReviewListView.as_view(), name='movie_reviews'),
     path('create/', views.ReviewCreateView.as_view(), name='create_movie_review'),
