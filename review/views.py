@@ -39,6 +39,7 @@ class ReviewDetailView(generic.DetailView):
         return review
 
 
+# TODO: enforce the user only being able to create one review per movie
 class ReviewCreateView(LoginRequiredMixin, generic.CreateView):
     model = Review
     fields = ['title', 'message', 'rating_out_of_five']
