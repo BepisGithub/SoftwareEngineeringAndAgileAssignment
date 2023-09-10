@@ -106,6 +106,7 @@ class ReviewDeleteView(LoginRequiredMixin, generic.DeleteView):
         return reverse_lazy('review:movie_reviews', kwargs={'pk': self.kwargs['pk']})
 
     def get_object(self, queryset=None):
+        # TODO: Duplicate code fragment, consider extracting to a helper method
         movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
         review = movie.review_set.all()[self.kwargs['review_id'] - 1]
         if self.request.user != review.user and not self.request.user.is_admin:
