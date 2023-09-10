@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.db.models import Avg
+from datetime import datetime
 
 from movie.models import Movie
 from .models import Review
@@ -86,6 +87,7 @@ class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
         return review
 
     def form_valid(self, form):
+        form.instance.date_last_edited = datetime.now()
         form.save()
         response = super().form_valid(form)
 
