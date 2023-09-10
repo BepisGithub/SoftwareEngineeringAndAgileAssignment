@@ -47,6 +47,7 @@ class ReviewCreateView(LoginRequiredMixin, generic.CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['movie'] = get_object_or_404(Movie, pk=self.kwargs['pk'])
+        context['action'] = 'Create'
         return context
 
     def get_success_url(self):
@@ -78,6 +79,7 @@ class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['movie'] = get_object_or_404(Movie, pk=self.kwargs['pk'])
+        context['action'] = 'Update'
         return context
 
     def get_object(self, queryset=None):
