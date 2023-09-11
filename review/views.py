@@ -30,7 +30,7 @@ class ReviewDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['movie'] = get_object_or_404(Movie, pk=self.kwargs['pk'])
-        context['review_index'] = self.kwargs['review_id']
+        context['review_index'] = self.kwargs['review_id'] # TODO: refactor to have review_id and index consistent across URLs
         return context
 
     def get_object(self, queryset=None):
@@ -78,7 +78,7 @@ class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
     fields = ['title', 'message', 'rating_out_of_five']
 
     def get_success_url(self):
-        return reverse_lazy('review:movie_reviews', kwargs={'pk': self.kwargs['pk']})
+        return reverse_lazy('review:display', kwargs={'pk': self.kwargs['pk'], 'review_id': self.kwargs['review_id']})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
