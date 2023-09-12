@@ -100,7 +100,7 @@ class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
     def get_object(self, queryset=None):
         movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
         review = movie.review_set.all()[self.kwargs['review_id'] - 1]
-        if self.request.user != review.user and not self.request.user.is_admin:
+        if self.request.user != review.user:
             raise PermissionDenied('You cannot update this review because you did not write it!')
         return review
 
