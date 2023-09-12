@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
@@ -58,7 +59,7 @@ class ReviewCreateView(LoginRequiredMixin, generic.CreateView):
         review_already_exists = Review.objects.filter(user=self.request.user, movie=form.instance.movie).exists()
         print(review_already_exists)
         if review_already_exists:
-            raise PermissionError("You have already written a review for this movie")
+            raise PermissionDenied('You have already written a review for this movie')
 
         form.save()
         response = super().form_valid(form)
@@ -73,6 +74,7 @@ class ReviewCreateView(LoginRequiredMixin, generic.CreateView):
         return response
 
 
+# Whenever the rating is displayed, append "/5" to it so people know the rating is out of 5 not 10
 class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Review
     fields = ['title', 'message', 'rating_out_of_five']
@@ -90,7 +92,7 @@ class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
         movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
         review = movie.review_set.all()[self.kwargs['review_id'] - 1]
         if self.request.user != review.user and not self.request.user.is_admin:
-            raise PermissionError("You are not authorised to do that!")
+            raise PermissionDenied('You cannot update this review because you did not write it!')
         return review
 
     def form_valid(self, form):
@@ -119,7 +121,8 @@ class ReviewDeleteView(LoginRequiredMixin, generic.DeleteView):
         movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
         review = movie.review_set.all()[self.kwargs['review_id'] - 1]
         if self.request.user != review.user and not self.request.user.is_admin:
-            raise PermissionError("You are not authorised to do that!")
+            print("what")
+            raise PermissionDenied('You cannot delete this view since you neither wrote it nor are you an admin')
         return review
 
     def form_valid(self, form):
