@@ -50,7 +50,7 @@ class UserTestCase(TestCase):
 
     def test_that_an_authenticated_user_can_see_the_update_view_for_himself(self):
         response = self.client.get(reverse('user:update_user', args=[self.user.id]))
-        self.assertEqual(response.status_code, 200) # due to the redirect defined by success_url
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user/update_user_form.html')
 
     def test_that_an_authenticated_user_cannot_see_the_update_view_for_another_user(self):
@@ -67,7 +67,7 @@ class UserTestCase(TestCase):
 
     def test_that_an_authenticated_user_can_see_the_delete_confirmation_for_himself(self):
         response = self.client.get(reverse('user:delete_user', args=[self.user.id]))
-        self.assertEqual(response.status_code, 200) # due to the redirect defined by success_url
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user/user_confirm_delete.html')
 
     def test_that_an_authenticated_user_can_delete_his_own_account(self):
@@ -78,10 +78,21 @@ class UserTestCase(TestCase):
 
     def test_that_an_authenticated_user_cannot_see_the_delete_confirmation_for_another(self):
         response = self.client.get(reverse('user:delete_user', args=[self.another_user.id]))
-        self.assertEqual(response.status_code, 403) # due to the redirect defined by success_url
+        self.assertEqual(response.status_code, 403)
         self.assertTemplateNotUsed(response, 'user/user_confirm_delete.html')
 
     def test_that_an_authenticated_user_cannot_delete_anothers_account(self):
         response = self.client.post(reverse('user:delete_user', args=[self.another_user.id]))
         self.assertEqual(response.status_code, 403)
-        User.objects.filter(id=self.another_user.id).exists()
+        self.assertTrue(User.objects.filter(id=self.another_user.id).exists())
+
+    def test_that_an_unauthenticated_user_cannot_see_the_delete_confirmation_for_another(self):
+        self.client.logout()
+        response = self.client.get(reverse('user:delete_user', args=[self.another_user.id]))
+        self.assertEqual(response.status_code, 302) # due to the redirect
+        self.assertTemplateNotUsed(response, 'user/user_confirm_delete.html')
+
+    def test_that_an_unauthenticated_user_cannot_delete_anothers_account(self):
+        self.client.logout()
+        response = self.client.post(reverse('user:delete_user', args=[self.another_user.id]), follow=True)
+        self.assertTrue(User.objects.filter(id=self.another_user.id).exists())
