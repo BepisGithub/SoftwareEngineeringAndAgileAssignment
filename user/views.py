@@ -1,5 +1,6 @@
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
@@ -55,6 +56,15 @@ class UserDeleteView(LoginRequiredMixin, generic.DeleteView):
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
+        first_name = form.data.get('first_name', "")
+        last_name = form.data.get('last_name', "")
+
+        if not first_name.isalpha() or not last_name.isalpha():
+            form.add_error('first_name', "Names cannot have digits")
+            form.add_error('last_name', "Names cannot have digits")
+            messages.error(request, "Names cannot have digits")
+            return render(request, 'user/register.html', {'form': form})
+
         if form.is_valid():
             new_user = form.save()
             login(request, new_user)

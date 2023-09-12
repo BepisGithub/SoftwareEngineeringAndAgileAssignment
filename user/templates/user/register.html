@@ -5,6 +5,14 @@
     <h2>Register</h2>
     <form method="post">
         {% csrf_token %}
+        {% if messages %}
+            <ul>
+                ERRORS SUBMITTING FORM:
+                {% for message in messages %}
+                    <li>{{message}}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
         {% for field in form %}
             <div>
                 {{ field.label }}
