@@ -10,6 +10,7 @@
         <p> Admin status: {{displayed_user.is_admin}}</p>
         {% if user.is_authenticated and user == displayed_user %}
             <p> Out of date information? <a href="{% url 'user:update_user' displayed_user.id %}">Update your details</a></p>
+            <p> Want to delete your account? <a href="{% url 'user:delete_user' displayed_user.id %}">You can do so here</a> </p>
         {% endif %}
     </div>
 {% endblock %}
