@@ -130,8 +130,7 @@ class ReviewDeleteView(LoginRequiredMixin, generic.DeleteView):
         movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
         review = movie.review_set.all()[self.kwargs['review_id'] - 1]
         if self.request.user != review.user and not self.request.user.is_admin:
-            print("what")
-            raise PermissionDenied('You cannot delete this view since you neither wrote it nor are you an admin')
+            raise PermissionDenied('You cannot delete this review since you neither wrote it nor are you an admin')
         return review
 
     def form_valid(self, form):
