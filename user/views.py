@@ -34,6 +34,13 @@ class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
             raise PermissionDenied('You cannot update someone else\'s user profile!')
         return self.request.user
 
+    def form_invalid(self, form):
+        # This is to fix a bug where when trying to change a username to one that is taken, the updated username shows
+        # in the navbar, like "Hello, (taken username)" which is extremely confusing for the user since the username
+        # change did not take place. Hence, this fix
+        self.request.user = User.objects.get(id=self.kwargs['pk'])
+        return super().form_invalid(form)
+
     def get_success_url(self):
         return reverse_lazy('user:user', kwargs={'pk': self.kwargs['pk']})
 
