@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %} Delete profile {% endblock %}
+
+{% block body %}
+    <h2>Are you sure you want to delete your profile, {{displayed_user.username}}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, I'm sure</button>
+    </form>
+{% endblock %}

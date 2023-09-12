@@ -37,6 +37,18 @@ class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
         return reverse_lazy('user:user', kwargs={'pk': self.kwargs['pk']})
 
 
+class UserDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = User
+    success_url = reverse_lazy('user:users')
+    context_object_name = 'displayed_user'
+
+    def get_object(self):
+        displayed_user = User.objects.get(id=self.kwargs['pk'])
+        if self.request.user != displayed_user:
+            raise PermissionDenied('You cannot delete someone else\'s user profile!')
+        return self.request.user
+
+
 
 # TODO: add a forgot account/forgot details option
 
