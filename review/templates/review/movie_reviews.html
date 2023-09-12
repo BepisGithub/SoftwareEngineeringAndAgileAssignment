@@ -19,16 +19,23 @@
             <br>
         {% endfor %}
 <!-- TODO: fix the repetition below. in both display.html and here we're doing a check for the exact same thing-->
+        {% if user.is_authenticated and first_review %}
+            <p>Want to add your own review?
+                <a href="{% url 'review:create_movie_review' movie.id %}">Write one here!</a>
+            </p>
+        {% elif not user.is_authenticated %}
+                <p><a href="{% url 'login' %}">Login</a> to submit a review!</p>
+        {% endif %}
+    {% else %}
         {% if user.is_authenticated %}
             <p>Want to add your own review?
                 <a href="{% url 'review:create_movie_review' movie.id %}">Write one here!</a>
             </p>
-        {% else %}
-                <p><a href="{% url 'login' %}">Login</a> to submit a review!</p>
+        {% elif not user.is_authenticated %}
+            <p>There are currently no reviews for this movie!
+                <a href="{% url 'review:create_movie_review' movie.id %}">Be the first to write one!</a>
+            </p>
         {% endif %}
-    {% else %}
-        <p>There are currently no reviews for this movie!
-            <a href="{% url 'review:create_movie_review' movie.id %}">Be the first to write one!</a>
-        </p>
+
     {% endif %}
 {% endblock %}
