@@ -27,15 +27,39 @@ class UserTestCase(TestCase):
         )
         self.another_user.save()
 
-    def test_user_list_view(self):
-        response = self.client.get(reverse('user:users'))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'user/users.html')
+    # Create tests
 
-    def test_user_display_view(self):
-        response = self.client.get(reverse('user:user', kwargs={'pk': 1}))
+    def test_that_valid_user_creation_succeeds(self):
+        valid_details ={
+            'username': 'unique',
+            'email': 'unique@email.com',
+            'first_name': 'unique',
+            'last_name': 'unique',
+            'password1': 'asdfasdf123',
+            'password2': 'asdfasdf123',
+        }
+
+        response = self.client.post(reverse('register'), valid_details)
+        self.assertEqual(response.status_code, 302)
+
+        self.assertTrue(User.objects.filter(email=valid_details['email']).exists())
+
+        self.assertTrue(User.objects.filter(email=valid_details['email']).count(), 1)
+
+    def test_that_user_creation_fails_with_non_unique_username(self):
+        valid_details_with_invalid_username = {
+            'username': self.user.username,
+            'email': 'unique@email.com',
+            'first_name': 'unique',
+            'last_name': 'unique',
+            'password1': 'asdfasdf123',
+            'password2': 'asdfasdf123',
+        }
+
+        response = self.client.post(reverse('register'), valid_details_with_invalid_username)
+
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'user/user.html')
+        self.assertFalse(User.objects.filter(email=valid_details_with_invalid_username['email']).exists())
 
     def test_that_first_name_cannot_have_numbers(self):
         self.user.first_name = '1'
@@ -58,6 +82,35 @@ class UserTestCase(TestCase):
 
         with self.assertRaises(ValidationError):
             self.user.full_clean()
+
+    def test_that_user_creation_fails_with_invalid_input(self):
+        valid_details = {
+            'username': '',
+            'email': 'notanemail',
+            'first_name': '1',
+            'last_name': '1',
+            'password1': 'samepassword',
+            'password2': 'differentpassword',
+        }
+
+        response = self.client.post(reverse('register'), valid_details)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(User.objects.filter(username=valid_details['username']).exists())
+
+    # Read tests
+
+    def test_user_list_view(self):
+        response = self.client.get(reverse('user:users'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'user/users.html')
+
+    def test_user_display_view(self):
+        response = self.client.get(reverse('user:user', kwargs={'pk': 1}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'user/user.html')
+
+    # Update tests
 
     def test_that_an_authenticated_user_can_see_the_update_view_for_himself(self):
         response = self.client.get(reverse('user:update_user', args=[self.user.id]))
@@ -163,6 +216,8 @@ class UserTestCase(TestCase):
         self.client.logout()
         response = self.client.get(reverse('user:update_user', args=[1]), follow=True)
         self.assertTemplateUsed(response, 'registration/login.html')
+
+    # Delete tests
 
     def test_that_an_authenticated_user_can_see_the_delete_confirmation_for_himself(self):
         response = self.client.get(reverse('user:delete_user', args=[self.user.id]))
