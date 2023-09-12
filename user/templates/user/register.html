@@ -5,7 +5,19 @@
     <h2>Register</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {% for field in form %}
+            <div>
+                {{ field.label }}
+                {{field}}
+                {% if field.field.required and field.label != 'Username' %}
+                    <span>Required</span>
+                {% endif %}
+
+                {% if field.help_text %}
+                    <span> {{field.help_text}}</span>
+                {% endif %}
+            </div>
+        {% endfor %}
         <button type="submit">Register</button>
     </form>
 {% endblock %}
