@@ -29,27 +29,13 @@ class MovieTestCase(TestCase):
         self.assertTemplateUsed(response, 'movie/display.html')
 
     def test_that_movie_title_cannot_exceed_100_chars(self):
-        invalid_movie = Movie.objects.create(
-            id=2,
-            title='A'*101,
-            description='Test Description',
-            duration=timedelta(hours=3),
-            date_released=datetime.today(),
-            average_rating_out_of_five=None
-        )
+        self.movie.title = 'A'*101
 
         with self.assertRaises(ValidationError):
-            invalid_movie.full_clean()
+            self.movie.full_clean()
 
     def test_that_movie_title_cannot_be_empty(self):
-        invalid_movie = Movie.objects.create(
-            id=2,
-            title='',
-            description='Test Description',
-            duration=timedelta(hours=3),
-            date_released=datetime.today(),
-            average_rating_out_of_five=None
-        )
+        self.movie.title = ''
 
         with self.assertRaises(ValidationError):
-            invalid_movie.full_clean()
+            self.movie.full_clean()

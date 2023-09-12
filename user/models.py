@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -17,6 +18,11 @@ class User(AbstractUser):
     # this application is small and no other groups will be needed, unlike a real, production-level application that
     # may change and evolve
     is_admin = models.BooleanField(default=False)
+
+    def clean(self):
+        super().clean()
+        if not self.first_name.isalpha() or not self.last_name.isalpha():
+            raise ValidationError('Names should not contain numbers')
 
 
 
