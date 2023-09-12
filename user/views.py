@@ -1,6 +1,22 @@
 from django.contrib.auth import login
 from django.shortcuts import render, redirect
+from django.views import generic
+
 from .forms import UserRegistrationForm
+from .models import User
+
+
+class UserListView(generic.ListView):
+    model = User
+    template_name = 'user/users.html'
+    context_object_name = 'users'
+
+class UserDetailView(generic.DetailView):
+    model = User
+    template_name = 'user/user.html'
+    context_object_name = 'displayed_user'
+
+
 
 # TODO: add a forgot account/forgot details option
 
