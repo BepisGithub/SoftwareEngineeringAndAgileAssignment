@@ -27,6 +27,16 @@ class UserTestCase(TestCase):
         )
         self.another_user.save()
 
+    def test_user_list_view(self):
+        response = self.client.get(reverse('user:users'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'user/users.html')
+
+    def test_user_display_view(self):
+        response = self.client.get(reverse('user:user', kwargs={'pk': 1}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'user/user.html')
+
     def test_that_first_name_cannot_have_numbers(self):
         self.user.first_name = '1'
 
