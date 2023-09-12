@@ -21,7 +21,8 @@ class User(AbstractUser):
 
     def clean(self):
         super().clean()
-        if not self.first_name.isalpha() or not self.last_name.isalpha():
+        # if names are present AND they have digits
+        if (self.first_name and not self.first_name.isalpha()) or (self.last_name and not self.last_name.isalpha()):
             raise ValidationError('Names should not contain numbers')
 
 
