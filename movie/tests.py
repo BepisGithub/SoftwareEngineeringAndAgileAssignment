@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.test import TestCase, Client
 from django.urls import reverse
 from datetime import datetime, timedelta
@@ -26,3 +27,29 @@ class MovieTestCase(TestCase):
         response = self.client.get(reverse('display', kwargs={'pk': 1}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'movie/display.html')
+
+    def test_that_movie_title_cannot_exceed_100_chars(self):
+        invalid_movie = Movie.objects.create(
+            id=2,
+            title='A'*101,
+            description='Test Description',
+            duration=timedelta(hours=3),
+            date_released=datetime.today(),
+            average_rating_out_of_five=None
+        )
+
+        with self.assertRaises(ValidationError):
+            invalid_movie.full_clean()
+
+    def test_that_movie_title_cannot_be_empty(self):
+        invalid_movie = Movie.objects.create(
+            id=2,
+            title='',
+            description='Test Description',
+            duration=timedelta(hours=3),
+            date_released=datetime.today(),
+            average_rating_out_of_five=None
+        )
+
+        with self.assertRaises(ValidationError):
+            invalid_movie.full_clean()
