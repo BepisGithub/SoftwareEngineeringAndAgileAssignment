@@ -62,5 +62,4 @@ class MovieTestCase(TestCase):
 
     def test_that_movie_rating_can_be_empty(self):
         self.movie.average_rating_out_of_five = None
-
         self.movie.full_clean()

@@ -18,8 +18,7 @@ class CreateReviewTestCase(BaseTestCase):
                          self.user1)
 
     def test_that_an_authenticated_user_cannot_see_the_create_view_if_its_not_their_first_review_of_a_movie(self):
-        response = self.client.post(reverse('review:create_movie_review', args=[self.movie1.id]), self.valid_review)
-
+        self.client.post(reverse('review:create_movie_review', args=[self.movie1.id]), self.valid_review)
         response = self.client.get(reverse('review:create_movie_review', args=[self.user1.id]))
         self.assertEqual(response.status_code, 403)
         self.assertTemplateNotUsed(response, 'review/review_form.html')
@@ -40,7 +39,6 @@ class CreateReviewTestCase(BaseTestCase):
         self.client.logout()
         response = self.client.post(reverse('review:create_movie_review', args=[self.movie1.id]), self.valid_review)
         self.assertEqual(response.status_code, 302)
-
         self.assertFalse(Review.objects.filter(movie=self.movie1).exists())
 
     def test_that_an_unauthenticated_user_is_redirected_to_login_when_trying_to_see_the_create_view(self):
@@ -54,6 +52,7 @@ class CreateReviewTestCase(BaseTestCase):
         self.assertTemplateUsed(response, 'registration/login.html')
         self.assertFalse(Review.objects.filter(movie=self.movie1).exists())
 
+    # TODO: refactor all test method names to be shorter
     def test_that_an_authenticated_user_can_see_the_create_view_of_another_movie_even_if_they_have_a_review_for_a_different_movie(self):
         first_response = self.client.post(reverse('review:create_movie_review', args=[self.movie1.id]), self.valid_review)
         second_response = self.client.get(reverse('review:create_movie_review', args=[self.movie2.id]), self.valid_review)
@@ -87,26 +86,22 @@ class CreateReviewTestCase(BaseTestCase):
         invalid_review = self.valid_review
         invalid_review['rating_out_of_five'] = 0
         response = self.client.post(reverse('review:create_movie_review', args=[self.movie1.id]), invalid_review)
-
         self.assertFalse(Review.objects.filter(movie=self.movie1).exists())
 
     def test_that_a_review_cannot_have_a_rating_greater_than_5(self):
         invalid_review = self.valid_review
         invalid_review['rating_out_of_five'] = 6
         response = self.client.post(reverse('review:create_movie_review', args=[self.movie1.id]), invalid_review)
-
         self.assertFalse(Review.objects.filter(movie=self.movie1).exists())
 
     def test_that_a_review_cannot_have_a_float_rating(self):
         invalid_review = self.valid_review
         invalid_review['rating_out_of_five'] = 3.3
         response = self.client.post(reverse('review:create_movie_review', args=[self.movie1.id]), invalid_review)
-
         self.assertFalse(Review.objects.filter(movie=self.movie1).exists())
 
     def test_that_a_review_cannot_have_an_alphabetical_rating(self):
         invalid_review = self.valid_review
         invalid_review['rating_out_of_five'] = 'a'
         response = self.client.post(reverse('review:create_movie_review', args=[self.movie1.id]), invalid_review)
-
         self.assertFalse(Review.objects.filter(movie=self.movie1).exists())

@@ -17,7 +17,6 @@ class UpdateUserTestCase(BaseTestCase):
             'username': 'new_username',
         }
         self.assertNotEqual(self.user.username, updated_details['username'])
-
         response = self.client.post(reverse('user:update_user', args=[self.user.id]), updated_details)
         self.user.refresh_from_db()
         self.assertEqual(self.user.username, updated_details['username'])
@@ -94,7 +93,6 @@ class UpdateUserTestCase(BaseTestCase):
 
         # Django simply re-renders the form without an actual redirect, so this is 200 instead of 302
         self.assertEqual(response.status_code, 200)
-
         self.assertTemplateUsed('user/update_user_form.html')
         self.assertIn('form', response.context)
         self.assertFalse(response.context['form'].is_valid())
