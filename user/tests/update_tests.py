@@ -2,22 +2,10 @@ from django.test import TestCase, Client
 from user.models import User
 from django.urls import reverse
 
-class UpdateUserTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.user = User.objects.create(
-            username='test_user',
-            email="JDoe@email.com",
-            password='asdfasdf123123'
-        )
-        self.user.save()
-        self.client.force_login(self.user)
-        self.another_user = User.objects.create(
-            username='test_user2',
-            email="JDoe2@email.com",
-            password='asdfasdf123123'
-        )
-        self.another_user.save()
+from user.tests.test_utils import BaseTestCase
+
+
+class UpdateUserTestCase(BaseTestCase):
 
     def test_that_an_authenticated_user_can_see_the_update_view_for_himself(self):
         response = self.client.get(reverse('user:update_user', args=[self.user.id]))
