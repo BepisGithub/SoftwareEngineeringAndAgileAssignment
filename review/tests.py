@@ -205,117 +205,306 @@ class ReviewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'review/review_form.html')
 
-    # def test_that_an_authenticated_user_can_update_his_reviews_title(self):
-    #     updated_details = {
-    #         'username': 'new_username',
-    #     }
-    #     self.assertNotEqual(self.user.username, updated_details['username'])
-    #
-    #     response = self.client.post(reverse('user:update_user', args=[self.user.id]), updated_details)
-    #     self.assertEqual(response.status_code, 302)
-    #     self.user.refresh_from_db()
-    #     self.assertEqual(self.user.username, updated_details['username'])
-    #
-    # def test_that_an_authenticated_user_cannot_update_his_reviews_title_to_empty(self):
-    #     updated_details = {
-    #         'username': '',
-    #     }
-    #     response = self.client.post(reverse('user:update_user', args=[self.user.id]), updated_details)
-    #     self.user.refresh_from_db()
-    #     self.assertNotEqual(self.user.username, updated_details['username'])
-    #
-    #
-    # def test_that_an_authenticated_user_can_update_his_reviews_message(self):
-    #     updated_details = {
-    #         'first_name': 'newname'
-    #     }
-    #     response = self.client.post(reverse('user:update_user', args=[self.user.id]), updated_details)
-    #     self.user.refresh_from_db()
-    #     self.assertNotEqual(self.user.username, updated_details['first_name'])
-    #
-    # def test_that_an_authenticated_user_cannot_update_his_reviews_message_to_empty(self):
-    #     updated_details = {
-    #         'username': '',
-    #     }
-    #     response = self.client.post(reverse('user:update_user', args=[self.user.id]), updated_details)
-    #     self.user.refresh_from_db()
-    #     self.assertNotEqual(self.user.username, updated_details['username'])
+    def test_that_an_authenticated_user_can_update_his_reviews_title(self):
+        self.create_valid_review_for_movie(self.movie1.id)
 
-    # def test_that_an_authenticated_user_can_update_his_reviews_rating(self):
-    #     updated_details = {
-    #         'first_name': 'newname'
-    #     }
-    #     response = self.client.post(reverse('user:update_user', args=[self.user.id]), updated_details)
-    #     self.user.refresh_from_db()
-    #     self.assertNotEqual(self.user.username, updated_details['first_name'])
-    #
-    # def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_empty(self):
-    #     updated_details = {
-    #         'username': '',
-    #     }
-    #     response = self.client.post(reverse('user:update_user', args=[self.user.id]), updated_details)
-    #     self.user.refresh_from_db()
-    #     self.assertNotEqual(self.user.username, updated_details['username'])
-    # def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_less_than_one(self):
-    #     updated_details = {
-    #         'username': '',
-    #     }
-    #     response = self.client.post(reverse('user:update_user', args=[self.user.id]), updated_details)
-    #     self.user.refresh_from_db()
-    #     self.assertNotEqual(self.user.username, updated_details['username'])
-    # def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_greater_than_five(self):
-    #     updated_details = {
-    #         'username': '',
-    #     }
-    #     response = self.client.post(reverse('user:update_user', args=[self.user.id]), updated_details)
-    #     self.user.refresh_from_db()
-    #     self.assertNotEqual(self.user.username, updated_details['username'])
-    # def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_a_decimal(self):
-    #     updated_details = {
-    #         'username': '',
-    #     }
-    #     response = self.client.post(reverse('user:update_user', args=[self.user.id]), updated_details)
-    #     self.user.refresh_from_db()
-    #     self.assertNotEqual(self.user.username, updated_details['username'])
-    # def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_an_alphabetical_value(self):
-    #     updated_details = {
-    #         'username': '',
-    #     }
-    #     response = self.client.post(reverse('user:update_user', args=[self.user.id]), updated_details)
-    #     self.user.refresh_from_db()
-    #     self.assertNotEqual(self.user.username, updated_details['username'])
-    #
-    #
-    # def test_that_an_authenticated_user_is_redirected_back_to_the_update_form_on_unsuccessful_update(self):
-    #     updated_details = {
-    #         'first_name': '1',
-    #     }
-    #     response = self.client.post(reverse('user:update_user', args=[self.user.id]), updated_details)
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertTemplateUsed('user/update_user_form.html')
-    #     self.assertIn('form', response.context)
-    #     self.assertFalse(response.context['form'].is_valid())
-    #
-    # def test_that_an_authenticated_user_cannot_see_the_update_view_for_another_users_review(self):
-    #     response = self.client.get(reverse('user:update_user', args=[self.another_user.id]))
-    #     self.assertEqual(response.status_code, 403)
-    #     self.assertTemplateNotUsed(response, 'user/update_user_form.html')
-    #
-    # def test_that_an_authenticated_user_cannot_update_another_users_review(self):
-    #
-    # def test_that_an_unauthenticated_user_cannot_see_the_update_view_for_another_user(self):
-    #     self.client.logout()
-    #     response = self.client.get(reverse('user:update_user', args=[1]), follow=True)
-    #     self.assertTemplateNotUsed(response, 'user/update_user_form.html')
-    #
-    # def test_that_an_unauthenticated_user_is_redirected_to_login_when_trying_to_update_a_user(self):
-    #     self.client.logout()
-    #     response = self.client.post(reverse('user:update_user', args=[1]), follow=True)
-    #     self.assertTemplateUsed(response, 'registration/login.html')
+        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
 
-    # we need to make sure only the author can both see the update form and update (take reference from user/tests.py
-    # and then we need to validate the fields of the new review, and test for success and failure and where they both
-    # redirect (again, take reference from the user tests)
+        updated_details = {
+            'title': 'new title',
+            'message': review.message,
+            'rating_out_of_five': review.rating_out_of_five
+        }
+
+        self.assertNotEqual(review.title, updated_details['title'])
+
+        response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
+        review.refresh_from_db()
+
+        self.assertEqual(review.title, updated_details['title'])
+
+    def test_that_an_authenticated_user_cannot_update_his_reviews_title_to_empty(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+
+        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+
+        updated_details = {
+            'title': '',
+            'message': review.message,
+            'rating_out_of_five': review.rating_out_of_five
+        }
+
+        self.assertNotEqual(review.title, updated_details['title'])
+
+        response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
+        review.refresh_from_db()
+
+        self.assertNotEqual(review.title, updated_details['title'])
+
+    def test_that_an_authenticated_user_can_update_his_reviews_message(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+
+        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+
+        updated_details = {
+            'title': review.title,
+            'message': 'new message',
+            'rating_out_of_five': review.rating_out_of_five
+        }
+
+        self.assertNotEqual(review.message, updated_details['message'])
+
+        response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
+        review.refresh_from_db()
+
+        self.assertEqual(review.message, updated_details['message'])
+
+    def test_that_an_authenticated_user_cannot_update_his_reviews_message_to_empty(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+
+        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+
+        updated_details = {
+            'title': review.title,
+            'message': '',
+            'rating_out_of_five': review.rating_out_of_five
+        }
+
+        self.assertNotEqual(review.message, updated_details['message'])
+
+        response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
+        review.refresh_from_db()
+
+        self.assertNotEqual(review.message, updated_details['message'])
+
+    def test_that_an_authenticated_user_can_update_his_reviews_rating(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+
+        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+
+        updated_details = {
+            'title': review.title,
+            'message': review.message,
+            'rating_out_of_five': review.rating_out_of_five - 1
+        }
+
+        self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
+
+        response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
+        review.refresh_from_db()
+
+        self.assertEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
+
+    def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_empty(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+
+        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+
+        updated_details = {
+            'title': review.title,
+            'message': review.message,
+            'rating_out_of_five': ''
+        }
+
+        self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
+
+        response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
+        review.refresh_from_db()
+
+        self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
+
+    def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_less_than_one(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+
+        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+
+        updated_details = {
+            'title': review.title,
+            'message': review.message,
+            'rating_out_of_five': 0
+        }
+
+        self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
+
+        response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
+        review.refresh_from_db()
+
+        self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
+
+    def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_greater_than_five(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+
+        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+
+        updated_details = {
+            'title': review.title,
+            'message': review.message,
+            'rating_out_of_five': 6
+        }
+
+        self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
+
+        response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
+        review.refresh_from_db()
+
+        self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
+
+    def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_a_float(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+
+        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+
+        updated_details = {
+            'title': review.title,
+            'message': review.message,
+            'rating_out_of_five': 4.4
+        }
+
+        self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
+
+        response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
+        review.refresh_from_db()
+
+        self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
+
+    def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_an_alphabetical_value(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+
+        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+
+        updated_details = {
+            'title': review.title,
+            'message': review.message,
+            'rating_out_of_five': 'five'
+        }
+
+        self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
+
+        response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
+        review.refresh_from_db()
+
+        self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
+
+    def test_that_an_authenticated_user_is_redirected_back_to_the_update_form_on_unsuccessful_update(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+
+        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+
+        updated_details = {
+            'title': '',
+            'message': '',
+            'rating_out_of_five': 0
+        }
+
+        response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
+        self.assertEqual(response.status_code, 200) # TODO: comment that unsuccessfull updates cause the view to rerender the form which means no redirect thus a 200 code
+        self.assertTemplateUsed('review/review_form.html')
+        self.assertIn('form', response.context)
+        self.assertFalse(response.context['form'].is_valid())
+
+
+    def test_that_an_authenticated_user_cannot_see_the_update_view_for_another_users_review(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+        self.client.logout()
+        self.client.force_login(self.user2)
+        response = self.client.get(reverse('review:update', args=[self.movie1.id, 1]))
+        self.assertEqual(response.status_code, 403)
+        self.assertTemplateNotUsed(response, 'user/update_user_form.html')
+
+    def test_that_an_admin_user_cannot_see_the_update_view_for_another_users_review(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+        self.client.logout()
+        self.user2.is_admin = True
+        self.client.force_login(self.user2)
+        self.assertTrue(self.user2.is_admin)
+        response = self.client.get(reverse('review:update', args=[self.movie1.id, 1]))
+        self.assertEqual(response.status_code, 403)
+        self.assertTemplateNotUsed(response, 'user/update_user_form.html')
+
+    def test_that_an_authenticated_user_cannot_update_another_users_review(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+        self.client.logout()
+        self.client.force_login(self.user2)
+
+        updated_details = {
+            'title': 'new title',
+            'message': 'new message',
+            'rating_out_of_five': 1
+        }
+        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+
+        self.assertNotEqual(review.title, updated_details['title'])
+        self.assertNotEqual(review.message, updated_details['message'])
+        self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
+
+        response = self.client.post(reverse('review:update', args=[self.movie1.id, 1]), updated_details)
+
+        self.assertEqual(response.status_code, 403)
+        self.assertNotEqual(review.title, updated_details['title'])
+        self.assertNotEqual(review.message, updated_details['message'])
+        self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
+
+    def test_that_an_admin_user_cannot_update_another_users_review(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+        self.client.logout()
+        self.user2.is_admin = True
+        self.client.force_login(self.user2)
+        self.assertTrue(self.user2.is_admin)
+
+        updated_details = {
+            'title': 'new title',
+            'message': 'new message',
+            'rating_out_of_five': 1
+        }
+        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+
+        # Only need to check one since the update either succeeded entirely or failed entirely
+        self.assertNotEqual(review.title, updated_details['title'])
+
+        response = self.client.post(reverse('review:update', args=[self.movie1.id, 1]), updated_details)
+
+        self.assertEqual(response.status_code, 403)
+        self.assertNotEqual(review.title, updated_details['title'])
+
+    def test_that_an_unauthenticated_user_cannot_see_the_update_view_for_another_users_review(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+        self.client.logout()
+        response = self.client.get(reverse('review:update', args=[self.movie1.id, 1]))
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'user/update_user_form.html')
+
+    def test_that_an_unauthenticated_user_cannot_update_another_users_review(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+        self.client.logout()
+
+        updated_details = {
+            'title': 'new title',
+            'message': 'new message',
+            'rating_out_of_five': 1
+        }
+        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+
+        self.assertNotEqual(review.title, updated_details['title'])
+        self.assertNotEqual(review.message, updated_details['message'])
+        self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
+
+        response = self.client.post(reverse('review:update', args=[self.movie1.id, 1]), updated_details)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertNotEqual(review.title, updated_details['title'])
+        self.assertNotEqual(review.message, updated_details['message'])
+        self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
+
+    def test_that_an_unauthenticated_user_is_redirected_to_login_when_trying_to_update_a_user(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+        self.client.logout()
+        updated_details = {
+            'title': 'new title',
+            'message': 'new message',
+            'rating_out_of_five': 1
+        }
+        response = self.client.post(reverse('review:update', args=[self.movie1.id, 1]), updated_details, follow=True)
+        self.assertTemplateUsed(response, 'registration/login.html')
 
     # Delete tests
 
