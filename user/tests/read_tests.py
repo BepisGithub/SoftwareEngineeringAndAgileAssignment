@@ -1,16 +1,9 @@
-from django.contrib.auth import get_user_model, login
 from django.core.exceptions import ValidationError
 from django.test import TestCase, Client
-from datetime import datetime
-
+from user.models import User
 from django.urls import reverse
 
-from user.models import User
-
-# TODO: add comments of all the test cases you're NOT covering because django covers them for you
-
-
-class UserTestCase(TestCase):
+class ReadUserTestCase(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create(
@@ -27,19 +20,12 @@ class UserTestCase(TestCase):
         )
         self.another_user.save()
 
-    # Create tests
+    def test_user_list_view(self):
+        response = self.client.get(reverse('user:users'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'user/users.html')
 
-
-
-    # Read tests
-
-
-
-    # Update tests
-
-
-
-    # Delete tests
-
-
-
+    def test_user_display_view(self):
+        response = self.client.get(reverse('user:user', kwargs={'pk': 1}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'user/user.html')
