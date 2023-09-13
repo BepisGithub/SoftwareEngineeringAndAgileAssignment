@@ -1,16 +1,6 @@
-from datetime import timedelta, datetime
-
-from django.db import IntegrityError
-from django.test import TestCase, Client
-
-
 from django.urls import reverse
 
-from movie.models import Movie
-from user.models import User
-
 from review.models import Review
-
 from review.tests.test_utils import BaseTestCase
 
 

@@ -1,16 +1,7 @@
-from datetime import timedelta, datetime
-
 from django.db import IntegrityError
-from django.test import TestCase, Client
-
-
 from django.urls import reverse
 
-from movie.models import Movie
-from user.models import User
-
 from review.models import Review
-
 from review.tests.test_utils import BaseTestCase
 
 
@@ -35,14 +26,9 @@ class CreateReviewTestCase(BaseTestCase):
 
     def test_that_an_authenticated_user_cannot_create_a_review_if_its_not_their_first_review_of_a_movie(self):
         response = self.client.post(reverse('review:create_movie_review', args=[self.movie1.id]), self.valid_review)
-        second_review = {
-            'title': 'second review title',
-            'message': 'second review message',
-            'rating_out_of_five': 5,
-        }
 
         with self.assertRaises(IntegrityError):
-            response = self.client.post(reverse('review:create_movie_review', args=[self.movie1.id]), second_review)
+            response = self.client.post(reverse('review:create_movie_review', args=[self.movie1.id]), self.second_review)
 
     def test_that_an_unauthenticated_user_cannot_see_the_create_view(self):
         self.client.logout()
