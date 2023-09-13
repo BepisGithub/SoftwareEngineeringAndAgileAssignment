@@ -5,7 +5,7 @@ from datetime import datetime
 
 from django.urls import reverse
 
-from .models import User
+from user.models import User
 
 # TODO: add comments of all the test cases you're NOT covering because django covers them for you
 

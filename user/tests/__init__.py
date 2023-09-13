@@ -1,0 +1,1 @@
+from user.tests.tests import UserTestCase
