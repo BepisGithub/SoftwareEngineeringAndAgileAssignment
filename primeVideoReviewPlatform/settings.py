@@ -49,9 +49,9 @@ LOGOUT_REDIRECT_URL = '/'
 # Application definition
 
 INSTALLED_APPS = [
-    'movie.apps.MovieConfig',
-    'user.apps.UserConfig',
-    'review.apps.ReviewConfig',
+    'movie',
+    'user',
+    'review',
     # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

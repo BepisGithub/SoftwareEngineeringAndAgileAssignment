@@ -3,7 +3,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from datetime import datetime, timedelta
 
-from .models import Movie
+from movie.models import Movie
 
 # Relatively few tests are required for this since there is no way for any user (apart from the site owner) to create,
 # update or delete any

@@ -1,0 +1,1 @@
+from movie.tests.tests import MovieTestCase
