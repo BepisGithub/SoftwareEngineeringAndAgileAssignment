@@ -207,9 +207,19 @@ class UserTestCase(TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertTemplateNotUsed(response, 'user/update_user_form.html')
 
+    def test_that_an_authenticated_user_cannot_update_another_user(self):
+        response = self.client.post(reverse('user:update_user', args=[self.another_user.id]))
+        self.assertEqual(response.status_code, 403)
+        self.assertTemplateNotUsed(response, 'user/update_user_form.html')
+
     def test_that_an_unauthenticated_user_cannot_see_the_update_view_for_another_user(self):
         self.client.logout()
         response = self.client.get(reverse('user:update_user', args=[1]), follow=True)
+        self.assertTemplateNotUsed(response, 'user/update_user_form.html')
+
+    def test_that_an_unauthenticated_user_cannot_update_another_user(self):
+        self.client.logout()
+        response = self.client.post(reverse('user:update_user', args=[1]), follow=True)
         self.assertTemplateNotUsed(response, 'user/update_user_form.html')
 
     def test_that_an_unauthenticated_user_is_redirected_to_login_when_trying_to_update_a_user(self):
@@ -227,8 +237,7 @@ class UserTestCase(TestCase):
     def test_that_an_authenticated_user_can_delete_his_own_account(self):
         response = self.client.post(reverse('user:delete_user', args=[self.user.id]))
         self.assertEqual(response.status_code, 302)
-        with self.assertRaises(User.DoesNotExist):
-            User.objects.get(id=self.user.id)
+        self.assertFalse(User.objects.filter(id=self.user.id).exists())
 
     def test_that_a_user_is_redirected_after_a_successful_account_deletion(self):
         response = self.client.post(reverse('user:delete_user', args=[self.user.id]), follow=True)
