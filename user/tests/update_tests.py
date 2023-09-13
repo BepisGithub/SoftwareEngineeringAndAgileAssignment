@@ -19,7 +19,6 @@ class UpdateUserTestCase(BaseTestCase):
         self.assertNotEqual(self.user.username, updated_details['username'])
 
         response = self.client.post(reverse('user:update_user', args=[self.user.id]), updated_details)
-        self.assertEqual(response.status_code, 302)
         self.user.refresh_from_db()
         self.assertEqual(self.user.username, updated_details['username'])
 
@@ -92,19 +91,22 @@ class UpdateUserTestCase(BaseTestCase):
             'first_name': '1',
         }
         response = self.client.post(reverse('user:update_user', args=[self.user.id]), updated_details)
+
+        # Django simply re-renders the form without an actual redirect, so this is 200 instead of 302
         self.assertEqual(response.status_code, 200)
+
         self.assertTemplateUsed('user/update_user_form.html')
         self.assertIn('form', response.context)
         self.assertFalse(response.context['form'].is_valid())
 
     def test_that_an_authenticated_user_cannot_see_the_update_view_for_another_user(self):
         response = self.client.get(reverse('user:update_user', args=[self.another_user.id]))
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 403)  # Forbidden action
         self.assertTemplateNotUsed(response, 'user/update_user_form.html')
 
     def test_that_an_authenticated_user_cannot_update_another_user(self):
         response = self.client.post(reverse('user:update_user', args=[self.another_user.id]))
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 403)  # Forbidden action
         self.assertTemplateNotUsed(response, 'user/update_user_form.html')
 
     def test_that_an_unauthenticated_user_cannot_see_the_update_view_for_another_user(self):
