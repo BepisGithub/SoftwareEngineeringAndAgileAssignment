@@ -1,0 +1,148 @@
+from datetime import timedelta, datetime
+
+from django.db import IntegrityError
+from django.test import TestCase, Client
+
+
+from django.urls import reverse
+
+from movie.models import Movie
+from user.models import User
+
+from review.models import Review
+
+class DeleteReviewTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user1 = User.objects.create(
+            username='test_user',
+            email="JDoe@email.com",
+            password='asdfasdf123123'
+        )
+        self.user1.save()
+        self.client.force_login(self.user1)
+
+        self.user2 = User.objects.create(
+            username='second_test_user',
+            email="DJoe@email.com",
+            password='asdfasdf123123'
+        )
+        self.user2.save()
+
+        self.movie1 = Movie.objects.create(
+            id=1,
+            title='Test Movie',
+            description='Test Description',
+            duration=timedelta(hours=3),
+            date_released=datetime.today(),
+            average_rating_out_of_five=None
+        )
+
+        self.movie1.save()
+
+        self.movie2 = Movie.objects.create(
+            id=2,
+            title='Second Test Movie',
+            description='Second Test Description',
+            duration=timedelta(hours=3),
+            date_released=datetime.today(),
+            average_rating_out_of_five=None
+        )
+
+        self.movie2.save()
+
+        self.valid_review = {
+            'title': 'review title',
+            'message': 'review message',
+            'rating_out_of_five': 5,
+        }
+
+    def create_valid_review_for_movie(self, movie_id):
+        response = self.client.post(reverse('review:create_movie_review', args=[movie_id]), self.valid_review)
+        return response
+
+
+
+    def test_that_an_authenticated_user_can_see_the_delete_confirmation_for_his_review(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+        response = self.client.get(reverse('review:delete', args=[self.movie1.id, 1]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'review/review_confirm_delete.html')
+
+    def test_that_an_authenticated_user_can_delete_his_review(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+        response = self.client.post(reverse('review:delete', args=[self.movie1.id, 1]))
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(Review.objects.filter(id=1).exists())
+
+    def test_that_a_user_is_redirected_after_a_successful_review_deletion(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+        response = self.client.post(reverse('review:delete', args=[self.movie1.id, 1]),follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'review/movie_reviews.html')
+
+    def test_that_an_authenticated_user_cannot_see_the_delete_confirmation_for_anothers_review(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+        self.client.logout()
+        self.client.force_login(self.user2)
+        response = self.client.get(reverse('review:delete', args=[self.movie1.id, 1]))
+        self.assertEqual(response.status_code, 403)
+        self.assertTemplateNotUsed(response, 'review/review_confirm_delete.html')
+
+    def test_that_an_authenticated_user_cannot_delete_anothers_review(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+        self.client.logout()
+        self.client.force_login(self.user2)
+        response = self.client.post(reverse('review:delete', args=[self.movie1.id, 1]))
+        self.assertEqual(response.status_code, 403)
+        self.assertTemplateNotUsed(response, 'review/review_confirm_delete.html')
+        self.assertTrue(Review.objects.filter(id=1).exists())
+
+    def test_that_an_admin_user_can_see_the_delete_confirmation_for_anothers_review(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+        self.client.logout()
+        self.user2.is_admin = True
+        self.user2.save()
+        self.client.force_login(self.user2)
+        self.assertTrue(self.user2.is_admin)
+
+        response = self.client.get(reverse('review:delete', args=[self.movie1.id, 1]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'review/review_confirm_delete.html')
+
+    def test_that_an_admin_user_can_delete_anothers_review(self):
+        # TODO: extract this switching user code to a helper method, should work since we're modifying the instance vars
+        self.create_valid_review_for_movie(self.movie1.id)
+        self.client.logout()
+        self.user2.is_admin = True
+        self.user2.save()
+        self.client.force_login(self.user2)
+        self.assertTrue(self.user2.is_admin)
+
+        response = self.client.post(reverse('review:delete', args=[self.movie1.id, 1]))
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(Review.objects.filter(id=1).exists())
+
+    def test_that_an_unauthenticated_user_cannot_see_the_delete_confirmation_for_anothers_review(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+        self.client.logout()
+
+        response = self.client.get(reverse('review:delete', args=[self.movie1.id, 1]))
+        self.assertTemplateNotUsed(response, 'review/review_confirm_delete.html')
+
+    def test_that_an_unauthenticated_user_cannot_delete_anothers_review(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+        self.client.logout()
+
+        response = self.client.post(reverse('review:delete', args=[self.movie1.id, 1]))
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'review/review_confirm_delete.html')
+        self.assertTrue(Review.objects.filter(id=1).exists())
+
+    def test_that_an_unauthenticated_user_is_redirected_after_attempting_to_delete_anothers_review(self):
+        self.create_valid_review_for_movie(self.movie1.id)
+        self.client.logout()
+        response = self.client.post(reverse('review:delete', args=[self.movie1.id, 1]), follow=True)
+
+        self.assertTemplateUsed(response, 'registration/login.html')
