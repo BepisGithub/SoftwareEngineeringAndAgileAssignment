@@ -37,7 +37,6 @@ AUTHENTICATION_BACKENDS = [
 
 LOGIN_URL = '/login'
 
-# TODO: see if theres an option to just redirect you where you were before
 # Go home after logging in
 LOGIN_REDIRECT_URL = '/'
 

@@ -107,7 +107,6 @@ class ReviewDeleteView(LoginRequiredMixin, generic.DeleteView):
         return reverse_lazy('review:list', kwargs={'pk': self.kwargs['pk']})
 
     def get_object(self, queryset=None):
-        # TODO: Duplicate code fragment, consider extracting to a helper method
         review = Review.objects.filter(id=self.kwargs['review_id']).get()
         if self.request.user != review.user and not self.request.user.is_admin:
             raise PermissionDenied('You cannot delete this review since you neither wrote it nor are you an admin')
