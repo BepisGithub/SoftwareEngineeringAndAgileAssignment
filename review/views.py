@@ -14,7 +14,7 @@ from django.views import generic
 class ReviewListView(generic.ListView):
     model = Review
     # TODO: refactor all template names to have a consistent naming convention across apps
-    template_name = 'review/movie_reviews.html'
+    template_name = 'review/list.html'
     context_object_name = 'reviews'
 
     def get_context_data(self, **kwargs):
@@ -32,7 +32,7 @@ class ReviewListView(generic.ListView):
 
 class ReviewDetailView(generic.DetailView):
     model = Review
-    template_name = 'review/detail.html'
+    template_name = 'review/display.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -65,7 +65,7 @@ class ReviewCreateView(LoginRequiredMixin, generic.CreateView):
         return context
 
     def get_success_url(self):
-        return reverse_lazy('review:movie_reviews', kwargs={'pk': self.kwargs['pk']})
+        return reverse_lazy('review:list', kwargs={'pk': self.kwargs['pk']})
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -123,7 +123,7 @@ class ReviewDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Review
 
     def get_success_url(self):
-        return reverse_lazy('review:movie_reviews', kwargs={'pk': self.kwargs['pk']})
+        return reverse_lazy('review:list', kwargs={'pk': self.kwargs['pk']})
 
     def get_object(self, queryset=None):
         # TODO: Duplicate code fragment, consider extracting to a helper method

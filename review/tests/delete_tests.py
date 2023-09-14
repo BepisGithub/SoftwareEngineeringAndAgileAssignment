@@ -22,7 +22,7 @@ class DeleteReviewTestCase(BaseTestCase):
         create_valid_review_for_movie(self.client, self.valid_review, self.movie1.id)
         response = self.client.post(reverse('review:delete', args=[self.movie1.id, 1]),follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'review/movie_reviews.html')
+        self.assertTemplateUsed(response, 'review/list.html')
 
     def test_that_an_authenticated_user_cannot_see_the_delete_confirmation_for_anothers_review(self):
         create_valid_review_for_movie(self.client, self.valid_review, self.movie1.id)

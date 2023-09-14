@@ -4,7 +4,7 @@
 
 {% block body %}
     <h1>Review for {{movie.title}}</h1>
-    <a href="{% url 'review:movie_reviews' movie.id %}">See all reviews</a>
+    <a href="{% url 'review:list' movie.id %}">See all reviews</a>
     <div style="border: 2px solid black;">
                 <p>Written by {{review.user}}</p>
                 <strong>{{review.title}}</strong>
