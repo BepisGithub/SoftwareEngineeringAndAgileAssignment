@@ -1,6 +1,6 @@
 {% extends 'base_form.html' %}
 {% block title %} {{action}} review {% endblock %}
-{% block form_title %} {{action}} review {% endblock %}
+{% block form_title %} {{action}} review for {{movie.title}} {% endblock %}
 
 {% block form %}
 {{ form.as_p }}
