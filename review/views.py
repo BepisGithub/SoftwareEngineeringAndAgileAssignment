@@ -37,12 +37,13 @@ class ReviewDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['movie'] = get_object_or_404(Movie, pk=self.kwargs['pk'])
-        context['nth_review'] = self.kwargs['nth_review'] # TODO: refactor to have review_id and index consistent across URLs
+        # context['review_id'] = self.kwargs['review_id'] # TODO: refactor to have review_id and index consistent across URLs
         return context
 
     def get_object(self, queryset=None):
-        movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
-        review = movie.review_set.all()[self.kwargs['nth_review'] - 1]
+        # movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
+        # review = movie.review_set.all()[self.kwargs[''] - 1]
+        review = Review.objects.filter(id=self.kwargs['review_id']).get()  # TODO: check if this is how you get it
         return review
 
 
@@ -89,7 +90,7 @@ class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
     fields = ['title', 'message', 'rating_out_of_five']
 
     def get_success_url(self):
-        return reverse_lazy('review:detail', kwargs={'pk': self.kwargs['pk'], 'nth_review': self.kwargs['nth_review']})
+        return reverse_lazy('review:detail', kwargs={'pk': self.kwargs['pk'], 'review_id': self.kwargs['review_id']})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -98,8 +99,9 @@ class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def get_object(self, queryset=None):
-        movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
-        review = movie.review_set.all()[self.kwargs['nth_review'] - 1]
+        # movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
+        # review = movie.review_set.all()[self.kwargs['nth_review'] - 1]
+        review = Review.objects.filter(id=self.kwargs['review_id']).get() #TODO: check if this is how you get it
         if self.request.user != review.user:
             raise PermissionDenied('You cannot update this review because you did not write it!')
         return review
@@ -127,8 +129,9 @@ class ReviewDeleteView(LoginRequiredMixin, generic.DeleteView):
 
     def get_object(self, queryset=None):
         # TODO: Duplicate code fragment, consider extracting to a helper method
-        movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
-        review = movie.review_set.all()[self.kwargs['nth_review'] - 1]
+        # movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
+        # review = movie.review_set.all()[self.kwargs['review_id'] - 1]
+        review = Review.objects.filter(id=self.kwargs['review_id']).get() #TODO: check if this is how you get it
         if self.request.user != review.user and not self.request.user.is_admin:
             raise PermissionDenied('You cannot delete this review since you neither wrote it nor are you an admin')
         return review

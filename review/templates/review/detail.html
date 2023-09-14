@@ -15,9 +15,9 @@
                 </div>
             </div>
     {% if user == review.user%}
-        <a href="{% url 'review:update' movie.id nth_review %}">Update here</a>
+        <a href="{% url 'review:update' movie.id review.id %}">Update here</a>
     {% endif %}
     {% if user.is_admin or user == review.user %}
-        <a href="{% url 'review:delete' movie.id nth_review %}">Delete here</a>
+        <a href="{% url 'review:delete' movie.id review.id %}">Delete here</a>
     {% endif %}
 {% endblock %}
