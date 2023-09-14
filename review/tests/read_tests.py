@@ -3,6 +3,8 @@ from django.urls import reverse
 from review.models import Review
 from review.tests.test_utils import BaseTestCase
 
+from review.tests.test_utils import create_valid_review_for_movie
+
 
 class ReadReviewTestCase(BaseTestCase):
 
@@ -10,6 +12,12 @@ class ReadReviewTestCase(BaseTestCase):
         response = self.client.get(reverse('review:list', args=[self.movie1.id]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'review/list.html')
+
+    def test_that_review_list_only_contains_reviews_for_that_movie(self):
+        create_valid_review_for_movie(self.client, self.valid_review, self.movie1.id)
+        create_valid_review_for_movie(self.client, self.valid_review, self.movie2.id)
+        response = self.client.get(reverse('review:list', args=[self.movie1.id]))
+        self.assertEqual(response.context['reviews'].count(), 1)
 
     def test_review_display_view(self):
         response = self.client.post(reverse('review:create', args=[self.movie1.id]), self.valid_review)
