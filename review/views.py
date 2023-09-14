@@ -14,11 +14,11 @@ class ReviewListView(generic.ListView):
     model = Review
     template_name = 'review/list.html'
     context_object_name = 'reviews'
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['movie'] = get_object_or_404(Movie, id=self.kwargs['pk'])
-        context['reviews'] = context['reviews'].filter(movie_id=self.kwargs['pk'])
         context['first_review'] = True
         if not self.request.user.is_authenticated:
             return context
@@ -26,6 +26,9 @@ class ReviewListView(generic.ListView):
         if review_already_exists:
             context['first_review'] = False
         return context
+
+    def get_queryset(self):
+        return Review.objects.filter(movie_id=self.kwargs['pk'])
 
 
 class ReviewDetailView(generic.DetailView):
