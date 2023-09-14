@@ -1,11 +1,11 @@
-{% extends 'base.html' %}
-{% block title %} Create review {% endblock %}
+{% extends 'base_form.html' %}
+{% block title %} Delete review {% endblock %}
+{% block form_title %} Are you sure you want to delete your review for {{review.movie.title}} {% endblock %}
 
-{% block body %}
-    <h2>Are you sure you want to delete your review for {{review.movie.title}}</h2>
-    <p>{{review}}</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Yes, I'm sure</button>
-    </form>
+{% block form %}
+{{ form.as_p }}
+{% endblock %}
+
+{% block button %}
+<button class="btn btn-danger" type="submit">Yes, I'm sure </button>
 {% endblock %}
