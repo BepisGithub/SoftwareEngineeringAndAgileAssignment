@@ -91,7 +91,7 @@ class UpdateUserTestCase(BaseTestCase):
         }
         response = self.client.post(reverse('user:update', args=[self.user.id]), updated_details)
 
-        # Django simply re-renders the form without an actual redirect, so this is 200 instead of 302
+        # In Django, unsuccessful updates cause the view to rerender the form which means no redirect thus a 200 code
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed('user/update_user_form.html')
         self.assertIn('form', response.context)

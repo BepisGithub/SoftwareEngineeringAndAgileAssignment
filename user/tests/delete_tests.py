@@ -47,3 +47,5 @@ class DeleteUserTestCase(BaseTestCase):
         response = self.client.post(reverse('user:delete', args=[self.user.id]), follow=True)
         self.assertTemplateUsed(response, 'registration/login.html')
         self.assertEqual(response.status_code, 200) # The login page is rendered successfully
+
+    # TODO: test that deleting a user also deletes his reviews

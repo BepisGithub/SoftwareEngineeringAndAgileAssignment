@@ -67,14 +67,8 @@ class ReviewCreateView(LoginRequiredMixin, generic.CreateView):
         form.instance.movie = get_object_or_404(Movie, id=self.kwargs['pk'])
         form.save()
         response = super().form_valid(form)
-
         # Updating the movie's average rating upon review creation
-        # TODO: make this a helper method since we will call this also for updating and deleting reviews
-        movie = form.instance.movie
-        updated_average_rating = Review.objects.filter(movie=movie).aggregate(
-            Avg('rating_out_of_five'))['rating_out_of_five__avg']
-        movie.average_rating_out_of_five = updated_average_rating
-        movie.save()
+        update_average_rating_for_movie(form.instance.movie)
         return response
 
 
@@ -102,14 +96,8 @@ class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
         form.instance.date_last_edited = datetime.now()
         form.save()
         response = super().form_valid(form)
-
         # Updating the movie's average rating upon review creation
-        # TODO: make this a helper method since we will call this also for updating and deleting reviews
-        movie = form.instance.movie
-        updated_average_rating = Review.objects.filter(movie=movie).aggregate(
-            Avg('rating_out_of_five'))['rating_out_of_five__avg']
-        movie.average_rating_out_of_five = updated_average_rating
-        movie.save()
+        update_average_rating_for_movie(form.instance.movie)
         return response
 
 
@@ -127,15 +115,14 @@ class ReviewDeleteView(LoginRequiredMixin, generic.DeleteView):
         return review
 
     def form_valid(self, form):
-
         response = super().form_valid(form)
-
-        # TODO: make this a helper method since we will call this also for updating and deleting reviews
         movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
-        updated_average_rating = Review.objects.filter(movie=movie).aggregate(
-            Avg('rating_out_of_five'))['rating_out_of_five__avg']
-        movie.average_rating_out_of_five = updated_average_rating
-        movie.save()
+        update_average_rating_for_movie(movie)
         return response
 
 
+def update_average_rating_for_movie(movie):
+    updated_average_rating = Review.objects.filter(movie=movie).aggregate(
+        Avg('rating_out_of_five'))['rating_out_of_five__avg']
+    movie.average_rating_out_of_five = updated_average_rating
+    movie.save()

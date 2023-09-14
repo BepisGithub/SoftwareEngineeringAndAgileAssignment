@@ -31,7 +31,6 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 # Use custom user definition
 AUTH_USER_MODEL = "user.User"
 
-# not sure if this is needed TODO: check
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]

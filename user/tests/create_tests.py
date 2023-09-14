@@ -21,6 +21,7 @@ class CreateUserTestCase(BaseTestCase):
         valid_details_with_non_unique_username = get_valid_account_details()
         valid_details_with_non_unique_username['username'] = self.user.username
         response = self.client.post(reverse('register'), valid_details_with_non_unique_username)
+        # In Django, unsuccessful updates cause the view to rerender the form which means no redirect thus a 200 code
         self.assertEqual(response.status_code, 200)
         self.assertFalse(User.objects.filter(email=valid_details_with_non_unique_username['email']).exists())
 
@@ -49,5 +50,6 @@ class CreateUserTestCase(BaseTestCase):
     def test_that_user_creation_fails_with_invalid_input(self):
         invalid_details = get_invalid_account_details()
         response = self.client.post(reverse('register'), invalid_details)
+        # In Django, unsuccessful updates cause the view to rerender the form which means no redirect thus a 200 code
         self.assertEqual(response.status_code, 200)
         self.assertFalse(User.objects.filter(username=invalid_details['username']).exists())
