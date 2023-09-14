@@ -96,3 +96,9 @@ class DeleteReviewTestCase(BaseTestCase):
         self.client.logout()
         response = self.client.post(reverse('review:delete', args=[self.movie1.id, 1]), follow=True)
         self.assertTemplateUsed(response, 'registration/login.html')
+
+    def test_that_deleting_a_user_also_deletes_his_reviews(self):
+        create_review_for_movie(self.client, self.valid_review, self.movie1.id)
+        self.assertTrue(Review.objects.filter(id=1).exists())
+        response = self.client.post(reverse('user:delete', args=[self.user1.id]))
+        self.assertFalse(Review.objects.filter(id=1).exists())
