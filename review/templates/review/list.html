@@ -6,14 +6,8 @@
         <h2>This movie has an average rating of {{movie.average_rating_out_of_five}}</h2>
         {% for review in reviews %}
             <div style="border: 2px solid black;">
-                <p>Written by {{review.user}}</p>
-                <strong>{{review.title}}</strong>
-                <p>{{review.message}}</p>
-                <div>
-                    <p>Rating out of five: {{review.rating_out_of_five}}</p>
-                    <p>Posted on {{review.date_posted}}</p>
-                </div>
-                <a href="{% url 'review:detail' movie.id review.id %}">Read more</a>
+            {% include 'review/review_div.html' with review=review %}
+            <a href="{% url 'review:detail' movie.id review.id %}">Read more</a>
             </div>
             <br>
         {% endfor %}

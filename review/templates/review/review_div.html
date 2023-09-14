@@ -1,0 +1,12 @@
+<div>
+    <p>Written by {{review.user}}</p>
+    <strong>{{review.title}}</strong>
+    <p>{{review.message}}</p>
+    <div>
+        <p>Rating out of five: {{review.rating_out_of_five}}</p>
+        <p>Posted on {{review.date_posted}}</p>
+        {% if review.date_last_edited %}
+            <p>Last updated on {{review.date_last_edited}}</p>
+        {% endif %}
+    </div>
+</div>
