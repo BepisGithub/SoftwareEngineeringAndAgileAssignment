@@ -5,6 +5,8 @@ from review.tests.test_utils import BaseTestCase, get_updated_details, create_re
 
 from review.tests.test_utils import set_user_to_admin
 
+from movie.models import Movie
+
 
 class UpdateReviewTestCase(BaseTestCase):
 
@@ -16,7 +18,7 @@ class UpdateReviewTestCase(BaseTestCase):
 
     def test_that_an_authenticated_user_can_update_his_reviews_title(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
-        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+        review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, 'new title', None, None)
         self.assertNotEqual(review.title, updated_details['title'])
         response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
@@ -25,7 +27,7 @@ class UpdateReviewTestCase(BaseTestCase):
 
     def test_that_an_authenticated_user_cannot_update_his_reviews_title_to_empty(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
-        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+        review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, '', None, None)
         self.assertNotEqual(review.title, updated_details['title'])
         response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
@@ -34,7 +36,7 @@ class UpdateReviewTestCase(BaseTestCase):
 
     def test_that_an_authenticated_user_can_update_his_reviews_message(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
-        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+        review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, None, 'new message', None)
         self.assertNotEqual(review.message, updated_details['message'])
         response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
@@ -43,7 +45,7 @@ class UpdateReviewTestCase(BaseTestCase):
 
     def test_that_an_authenticated_user_cannot_update_his_reviews_message_to_empty(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
-        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+        review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, None, '', None)
         self.assertNotEqual(review.message, updated_details['message'])
         response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
@@ -52,16 +54,27 @@ class UpdateReviewTestCase(BaseTestCase):
 
     def test_that_an_authenticated_user_can_update_his_reviews_rating(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
-        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+        review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, None, None, self.valid_review['rating_out_of_five'] - 1)
         self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
         response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
         review.refresh_from_db()
         self.assertEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
 
+    def test_that_updating_a_review_causes_the_average_rating_of_a_movie_to_be_recalculated(self):
+        create_review_for_movie(self.client, self.valid_review, self.movie1.id)
+        movie = Movie.objects.filter(id=self.movie1.id).get()
+        review = Review.objects.filter(id=1).get()
+        updated_details = get_updated_details(self.valid_review, None, None,
+                                              self.valid_review['rating_out_of_five'] - 1)
+        self.assertNotEqual(movie.average_rating_out_of_five, updated_details['rating_out_of_five'])
+        response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
+        movie.refresh_from_db()
+        self.assertEqual(movie.average_rating_out_of_five, updated_details['rating_out_of_five'])
+
     def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_empty(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
-        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+        review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, None, None, '')
         self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
         response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
@@ -70,7 +83,7 @@ class UpdateReviewTestCase(BaseTestCase):
 
     def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_less_than_one(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
-        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+        review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, None, None, 0)
         self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
         response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
@@ -79,7 +92,7 @@ class UpdateReviewTestCase(BaseTestCase):
 
     def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_greater_than_five(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
-        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+        review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, None, None, 6)
         self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
         response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
@@ -88,7 +101,7 @@ class UpdateReviewTestCase(BaseTestCase):
 
     def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_a_float(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
-        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+        review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, None, None, 4.4)
         self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
         response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
@@ -97,7 +110,7 @@ class UpdateReviewTestCase(BaseTestCase):
 
     def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_an_alphabetical_value(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
-        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+        review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, None, None, 'five')
         self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
         response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
@@ -106,10 +119,11 @@ class UpdateReviewTestCase(BaseTestCase):
 
     def test_that_an_authenticated_user_is_redirected_back_to_the_update_form_on_unsuccessful_update(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
-        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+        review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, '', '', 0)
         response = self.client.post(reverse('review:update', args=[self.movie1.id, review.id]), updated_details)
-        self.assertEqual(response.status_code, 200) # TODO: comment that unsuccessfull updates cause the view to rerender the form which means no redirect thus a 200 code
+        # In Django, unsuccessful updates cause the view to rerender the form which means no redirect thus a 200 code
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed('review/review_form.html')
         self.assertIn('form', response.context)
         self.assertFalse(response.context['form'].is_valid())
@@ -137,7 +151,7 @@ class UpdateReviewTestCase(BaseTestCase):
         self.client.logout()
         self.client.force_login(self.user2)
         updated_details = get_updated_details(self.valid_review, 'new title', 'new message', 1)
-        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+        review = Review.objects.filter(id=1).get()
         self.assertNotEqual(review.title, updated_details['title'])
         self.assertNotEqual(review.message, updated_details['message'])
         self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
@@ -154,7 +168,7 @@ class UpdateReviewTestCase(BaseTestCase):
         self.client.force_login(self.user2)
         self.assertTrue(self.user2.is_admin)
         updated_details = get_updated_details(self.valid_review, 'new title', 'new message', 1)
-        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+        review = Review.objects.filter(id=1).get()
         # Only need to check one since the update either succeeded entirely or failed entirely
         self.assertNotEqual(review.title, updated_details['title'])
         response = self.client.post(reverse('review:update', args=[self.movie1.id, 1]), updated_details)
@@ -172,7 +186,7 @@ class UpdateReviewTestCase(BaseTestCase):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         self.client.logout()
         updated_details = get_updated_details(self.valid_review, 'new title', 'new message', 1)
-        review = Review.objects.filter(movie_id=self.movie1.id).get(id=1)
+        review = Review.objects.filter(id=1).get()
         self.assertNotEqual(review.title, updated_details['title'])
         self.assertNotEqual(review.message, updated_details['message'])
         self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])

@@ -8,7 +8,6 @@ from review.tests.test_utils import create_review_for_movie
 
 
 class CreateReviewTestCase(BaseTestCase):
-    # TODO: refactor these to use the test utils helper method for creating a review
     def test_that_an_authenticated_user_can_see_the_create_view_if_its_their_first_review_of_a_movie(self):
         response = self.client.get(reverse('review:create', args=[self.user1.id]))
         self.assertEqual(response.status_code, 200)

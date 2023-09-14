@@ -5,6 +5,8 @@ from review.tests.test_utils import BaseTestCase, create_review_for_movie
 
 from review.tests.test_utils import set_user_to_admin
 
+from movie.models import Movie
+
 
 class DeleteReviewTestCase(BaseTestCase):
 
@@ -19,6 +21,18 @@ class DeleteReviewTestCase(BaseTestCase):
         response = self.client.post(reverse('review:delete', args=[self.movie1.id, 1]))
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Review.objects.filter(id=1).exists())
+
+    # TODO: write this test
+    def test_that_deleting_a_review_causes_the_average_rating_of_a_movie_to_be_recalculated(self):
+        movie = Movie.objects.filter(id=self.movie1.id).get()
+        create_review_for_movie(self.client, self.valid_review, self.movie1.id)
+        movie.refresh_from_db()
+        self.assertNotEqual(movie.average_rating_out_of_five, None)
+        response = self.client.post(reverse('review:delete', args=[self.movie1.id, 1]))
+        movie.refresh_from_db()
+        self.assertEqual(movie.average_rating_out_of_five, None)
+
+
 
     def test_that_a_user_is_redirected_after_a_successful_review_deletion(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
