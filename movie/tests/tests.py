@@ -27,7 +27,7 @@ class MovieTestCase(TestCase):
         self.assertTemplateUsed(response, 'movie/list.html')
 
     def test_movie_detail_view(self):
-        response = self.client.get(reverse('detail', kwargs={'pk': 1}))
+        response = self.client.get(reverse('detail', args=[1]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'movie/detail.html')
 
