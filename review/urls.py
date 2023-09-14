@@ -8,8 +8,8 @@ app_name = 'review'
 urlpatterns = [
     path('', views.ReviewListView.as_view(), name='list'),
     path('create/', views.ReviewCreateView.as_view(), name='create'),
-    path('<int:review_id>/', views.ReviewDetailView.as_view(), name='detail'),
-    path('<int:review_id>/update/', views.ReviewUpdateView.as_view(), name='update'),
-    path('<int:review_id>/delete/', views.ReviewDeleteView.as_view(), name='delete')
+    path('<int:nth_review>/', views.ReviewDetailView.as_view(), name='detail'),
+    path('<int:nth_review>/update/', views.ReviewUpdateView.as_view(), name='update'),
+    path('<int:nth_review>/delete/', views.ReviewDeleteView.as_view(), name='delete')
 
 ]
