@@ -9,11 +9,11 @@ from user.tests.test_utils import BaseTestCase
 class ReadUserTestCase(BaseTestCase):
 
     def test_user_list_view(self):
-        response = self.client.get(reverse('user:users'))
+        response = self.client.get(reverse('user:list'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'user/users.html')
+        self.assertTemplateUsed(response, 'user/list.html')
 
-    def test_user_display_view(self):
-        response = self.client.get(reverse('user:user', kwargs={'pk': 1}))
+    def test_user_detail_view(self):
+        response = self.client.get(reverse('user:detail', kwargs={'pk': 1}))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'user/user.html')
+        self.assertTemplateUsed(response, 'user/detail.html')

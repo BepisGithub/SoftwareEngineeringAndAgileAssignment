@@ -12,13 +12,13 @@ from .models import User
 
 class UserListView(generic.ListView):
     model = User
-    template_name = 'user/users.html'
+    template_name = 'user/list.html'
     context_object_name = 'users'
 
 
 class UserDetailView(generic.DetailView):
     model = User
-    template_name = 'user/user.html'
+    template_name = 'user/detail.html'
     context_object_name = 'displayed_user'
 
 
@@ -42,12 +42,12 @@ class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
         return super().form_invalid(form)
 
     def get_success_url(self):
-        return reverse_lazy('user:user', kwargs={'pk': self.kwargs['pk']})
+        return reverse_lazy('user:detail', kwargs={'pk': self.kwargs['pk']})
 
 
 class UserDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = User
-    success_url = reverse_lazy('user:users')
+    success_url = reverse_lazy('user:list')
     context_object_name = 'displayed_user'
 
     def get_object(self):

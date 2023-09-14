@@ -19,7 +19,7 @@ class DeleteUserTestCase(BaseTestCase):
     def test_that_a_user_is_redirected_after_a_successful_account_deletion(self):
         response = self.client.post(reverse('user:delete_user', args=[self.user.id]), follow=True)
         self.assertEqual(response.status_code, 200)  # The all users page is rendered successfully
-        self.assertTemplateUsed(response, 'user/users.html')
+        self.assertTemplateUsed(response, 'user/list.html')
 
     def test_that_an_authenticated_user_cannot_see_the_delete_confirmation_for_another(self):
         response = self.client.get(reverse('user:delete_user', args=[self.another_user.id]))

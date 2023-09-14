@@ -4,7 +4,7 @@
     <h1>Users</h1>
     {% for user in users %}
       <div>
-        <p>{{ user.username }} <a href="{% url 'user:user' user.id %}">See more</a></p>
+        <p>{{ user.username }} <a href="{% url 'user:detail' user.id %}">See more</a></p>
       </div>
     {% endfor %}
 {% endblock %}
