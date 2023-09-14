@@ -1,11 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'base_form.html' %}
 {% block title %} {{action}} review {% endblock %}
+{% block form_title %} {{action}} review {% endblock %}
 
-{% block body %}
-    <h2> {{action}} review for {{movie.title}}</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">{{action}} review</button>
-    </form>
+{% block form %}
+{{ form.as_p }}
 {% endblock %}
+
+{% block button_text %} {{action}} review {% endblock %}

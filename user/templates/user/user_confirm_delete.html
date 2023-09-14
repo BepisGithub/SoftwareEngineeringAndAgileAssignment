@@ -1,10 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'base_form.html' %}
 {% block title %} Delete profile {% endblock %}
+{% block form_title %} Are you sure you want to delete your profile, {{displayed_user.username}} {% endblock %}
 
-{% block body %}
-    <h2>Are you sure you want to delete your profile, {{displayed_user.username}}</h2>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Yes, I'm sure</button>
-    </form>
+{% block form %}
+{{ form.as_p }}
 {% endblock %}
+
+{% block button_text %} Yes, I'm sure {% endblock %}

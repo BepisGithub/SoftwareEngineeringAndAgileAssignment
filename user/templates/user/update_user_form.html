@@ -1,11 +1,9 @@
-    {% extends 'base.html' %}
-    {% block title %} Update user {% endblock %}
+{% extends 'base_form.html' %}
+{% block title %} Update user {% endblock %}
+{% block form_title %} Update user {% endblock %}
 
-    {% block body %}
-        <h2> Update User</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Update user</button>
-        </form>
-    {% endblock %}
+{% block form %}
+{{ form.as_p }}
+{% endblock %}
+
+{% block button_text %} Update user {% endblock %}
