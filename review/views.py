@@ -32,7 +32,7 @@ class ReviewListView(generic.ListView):
 
 class ReviewDetailView(generic.DetailView):
     model = Review
-    template_name = 'review/display.html'
+    template_name = 'review/detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -89,7 +89,7 @@ class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
     fields = ['title', 'message', 'rating_out_of_five']
 
     def get_success_url(self):
-        return reverse_lazy('review:display', kwargs={'pk': self.kwargs['pk'], 'review_id': self.kwargs['review_id']})
+        return reverse_lazy('review:detail', kwargs={'pk': self.kwargs['pk'], 'review_id': self.kwargs['review_id']})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
