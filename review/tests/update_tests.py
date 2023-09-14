@@ -3,6 +3,8 @@ from django.urls import reverse
 from review.models import Review
 from review.tests.test_utils import BaseTestCase, get_updated_details, create_review_for_movie
 
+from review.tests.test_utils import set_user_to_admin
+
 
 class UpdateReviewTestCase(BaseTestCase):
 
@@ -123,8 +125,7 @@ class UpdateReviewTestCase(BaseTestCase):
     def test_that_an_admin_user_cannot_see_the_update_view_for_another_users_review(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         self.client.logout()
-        self.user2.is_admin = True
-        self.user2.save()
+        set_user_to_admin(self.user2)
         self.client.force_login(self.user2)
         self.assertTrue(self.user2.is_admin)
         response = self.client.get(reverse('review:update', args=[self.movie1.id, 1]))
@@ -149,8 +150,7 @@ class UpdateReviewTestCase(BaseTestCase):
     def test_that_an_admin_user_cannot_update_another_users_review(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         self.client.logout()
-        self.user2.is_admin = True
-        self.user2.save()
+        set_user_to_admin(self.user2)
         self.client.force_login(self.user2)
         self.assertTrue(self.user2.is_admin)
         updated_details = get_updated_details(self.valid_review, 'new title', 'new message', 1)

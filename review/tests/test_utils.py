@@ -74,3 +74,8 @@ def get_updated_details(review_dict, title=None, message=None, rating_out_of_fiv
 def create_review_for_movie(client, review, movie_id):
     response = client.post(reverse('review:create', args=[movie_id]), review)
     return response
+
+
+def set_user_to_admin(user):
+    user.is_admin = True
+    user.save()
