@@ -1,6 +1,6 @@
 {% extends 'base_form.html' %}
 {% block title %} Delete profile {% endblock %}
-{% block form_title %} Are you sure you want to delete your profile, {{displayed_user.username}} {% endblock %}
+{% block form_title %} Are you sure you want to delete your profile, {{displayed_user.username}}? This will also delete ALL of your reviews {% endblock %}
 
 {% block form %}
 {{ form.as_p }}
