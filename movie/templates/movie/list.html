@@ -10,4 +10,5 @@
         <li class="list-group-item"><a href="{% url 'detail' movie.id %}">{{movie.title}}</a></li>
     {% endfor %}
     </ul>
+    {% include 'base_pagination.html' with page_obj=page_obj %}
 {% endblock %}
