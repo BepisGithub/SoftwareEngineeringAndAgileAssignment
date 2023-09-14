@@ -71,6 +71,6 @@ def get_updated_details(review_dict, title=None, message=None, rating_out_of_fiv
     return review_dict
 
 
-def create_valid_review_for_movie(client, review, movie_id):
+def create_review_for_movie(client, review, movie_id):
     response = client.post(reverse('review:create', args=[movie_id]), review)
     return response
