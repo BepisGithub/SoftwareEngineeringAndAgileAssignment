@@ -107,7 +107,13 @@ class ReviewDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Review
 
     def get_success_url(self):
-        return reverse_lazy('review:list', kwargs={'pk': self.kwargs['pk']})
+        movie_id = self.object.movie.id
+        movie_has_reviews = Review.objects.filter(movie_id=movie_id).exclude(id=self.object.id).exists()
+        if movie_has_reviews:
+            return reverse_lazy('review:list', kwargs={'pk': self.kwargs['pk']})
+        else:
+            return reverse_lazy('detail', kwargs={'pk': self.kwargs['pk']})
+
 
     def get_object(self, queryset=None):
         review = Review.objects.filter(id=self.kwargs['review_id']).get()

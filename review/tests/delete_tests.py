@@ -31,13 +31,14 @@ class DeleteReviewTestCase(BaseTestCase):
         movie.refresh_from_db()
         self.assertEqual(movie.average_rating_out_of_five, None)
 
-
-
-    def test_that_a_user_is_redirected_after_a_successful_review_deletion(self):
+    def test_that_a_user_is_redirected_to_the_movie_detail_page_after_deleting_the_only_review(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         response = self.client.post(reverse('review:delete', args=[self.movie1.id, 1]),follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'review/list.html')
+        self.assertTemplateNotUsed(response, 'review/list.html')
+        self.assertTemplateUsed(response, 'movie/detail.html')
+
+
 
     def test_that_an_authenticated_user_cannot_see_the_delete_confirmation_for_anothers_review(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
