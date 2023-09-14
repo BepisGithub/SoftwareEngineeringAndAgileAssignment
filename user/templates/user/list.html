@@ -7,4 +7,5 @@
         <p>{{ user.username }} <a href="{% url 'user:detail' user.id %}">See more</a></p>
       </div>
     {% endfor %}
+    {% include 'base_pagination.html' with page_obj=page_obj %}
 {% endblock %}
