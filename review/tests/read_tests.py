@@ -12,7 +12,7 @@ class ReadReviewTestCase(BaseTestCase):
         self.assertTemplateUsed(response, 'review/list.html')
 
     def test_review_display_view(self):
-        response = self.client.post(reverse('review:create_movie_review', args=[self.movie1.id]), self.valid_review)
+        response = self.client.post(reverse('review:create', args=[self.movie1.id]), self.valid_review)
         review = Review.objects.filter(movie=self.movie1).get(title=self.valid_review['title'])
         response = self.client.get(reverse('review:detail', kwargs={'pk': self.movie1.id, 'review_id': review.id }))
         self.assertEqual(response.status_code, 200)
