@@ -1,8 +1,12 @@
 {% extends 'base_form.html' %}
 {% block title %} Delete review {% endblock %}
-{% block form_title %} Are you sure you want to delete your review for {{review.movie.title}} {% endblock %}
-
+{% block form_title %} Are you sure you want to delete your review for {{review.movie.title}}? {% endblock %}
 {% block form %}
+<div class="card">
+    <div class="card-body">
+        {% include 'review/review_div.html' with review=review %}
+    </div>
+</div>
 {{ form.as_p }}
 {% endblock %}
 
