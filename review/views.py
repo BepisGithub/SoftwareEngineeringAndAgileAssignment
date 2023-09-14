@@ -1,7 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.db.models import Avg
 from datetime import datetime
@@ -13,7 +12,6 @@ from django.views import generic
 
 class ReviewListView(generic.ListView):
     model = Review
-    # TODO: refactor all template names to have a consistent naming convention across apps
     template_name = 'review/list.html'
     context_object_name = 'reviews'
 
@@ -37,13 +35,10 @@ class ReviewDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['movie'] = get_object_or_404(Movie, pk=self.kwargs['pk'])
-        # context['review_id'] = self.kwargs['review_id'] # TODO: refactor to have review_id and index consistent across URLs
         return context
 
     def get_object(self, queryset=None):
-        # movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
-        # review = movie.review_set.all()[self.kwargs[''] - 1]
-        review = Review.objects.filter(id=self.kwargs['review_id']).get()  # TODO: check if this is how you get it
+        review = Review.objects.filter(id=self.kwargs['review_id']).get()
         return review
 
 
@@ -57,7 +52,6 @@ class ReviewCreateView(LoginRequiredMixin, generic.CreateView):
         if review_already_exists:
             raise PermissionDenied('You have already written a review for this movie')
         return super().get(request, *args, **kwargs)
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -84,7 +78,7 @@ class ReviewCreateView(LoginRequiredMixin, generic.CreateView):
         return response
 
 
-# Whenever the rating is displayed, append "/5" to it so people know the rating is out of 5 not 10
+# TODO: Whenever the rating is displayed, append "/5" to it so people know the rating is out of 5 not 10
 class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Review
     fields = ['title', 'message', 'rating_out_of_five']
@@ -99,9 +93,7 @@ class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def get_object(self, queryset=None):
-        # movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
-        # review = movie.review_set.all()[self.kwargs['nth_review'] - 1]
-        review = Review.objects.filter(id=self.kwargs['review_id']).get() #TODO: check if this is how you get it
+        review = Review.objects.filter(id=self.kwargs['review_id']).get()
         if self.request.user != review.user:
             raise PermissionDenied('You cannot update this review because you did not write it!')
         return review
@@ -129,9 +121,7 @@ class ReviewDeleteView(LoginRequiredMixin, generic.DeleteView):
 
     def get_object(self, queryset=None):
         # TODO: Duplicate code fragment, consider extracting to a helper method
-        # movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
-        # review = movie.review_set.all()[self.kwargs['review_id'] - 1]
-        review = Review.objects.filter(id=self.kwargs['review_id']).get() #TODO: check if this is how you get it
+        review = Review.objects.filter(id=self.kwargs['review_id']).get()
         if self.request.user != review.user and not self.request.user.is_admin:
             raise PermissionDenied('You cannot delete this review since you neither wrote it nor are you an admin')
         return review
