@@ -10,7 +10,7 @@ class MovieListView(generic.ListView):
     model = Movie
     template_name = 'movie/list.html'
     context_object_name = 'movies'
-    paginate_by = 5
+    paginate_by = 8
 
 
 class MovieDetailView(generic.DetailView):

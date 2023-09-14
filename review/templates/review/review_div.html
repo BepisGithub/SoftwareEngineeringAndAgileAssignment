@@ -1,12 +1,10 @@
+<h3 class="card-title">{{review.title}}</h3>
+<h6 class="card-subtitle mb-2 text-muted">Written by {{review.user}}</h6>
+<p>{{review.message}}</p>
 <div>
-    <p>Written by {{review.user}}</p>
-    <strong>{{review.title}}</strong>
-    <p>{{review.message}}</p>
-    <div>
-        <p>Rating out of five: {{review.rating_out_of_five}}</p>
-        <p>Posted on {{review.date_posted}}</p>
-        {% if review.date_last_edited %}
-            <p>Last updated on {{review.date_last_edited}}</p>
-        {% endif %}
-    </div>
+    <p>Rating out of five: {{review.rating_out_of_five}}</p>
+    <p>Posted on {{review.date_posted}}</p>
+    {% if review.date_last_edited %}
+        <p>Last updated on {{review.date_last_edited}}</p>
+    {% endif %}
 </div>

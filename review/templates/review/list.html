@@ -5,9 +5,12 @@
     {% if reviews.exists %}
         <h2>This movie has an average rating of {{movie.average_rating_out_of_five}}</h2>
         {% for review in reviews %}
-            <div class="p-3 mb-2 container-fluid bg-light">
-            {% include 'review/review_div.html' with review=review %}
-            <a href="{% url 'review:detail' movie.id review.id %}">Read more</a>
+            <div class="card">
+                <div class="card-body">
+                    {% include 'review/review_div.html' with review=review %}
+<!--                    TODO: remove the underline from anchor elements -->
+                    <a href="{% url 'review:detail' movie.id review.id %}" class="card-link" >Read more</a>
+                </div>
             </div>
             <br>
         {% endfor %}

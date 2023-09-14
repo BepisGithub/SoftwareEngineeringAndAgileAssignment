@@ -4,14 +4,17 @@
 
 {% block body %}
     <h1>Review for {{movie.title}}</h1>
-    <a href="{% url 'review:list' movie.id %}">See all reviews</a>
-    <div style="border: 2px solid black;">
-        {% include 'review/review_div.html' with review=review %}
+    <button class="btn btn-outline-dark"><a href="{% url 'review:list' movie.id %}" class="link-primary">See all reviews</a></button>
+    <div class="card">
+        <div class="card-body">
+            {% include 'review/review_div.html' with review=review %}
+            {% if user == review.user%}
+                <a href="{% url 'review:update' movie.id review.id %}">Update here</a>
+            {% endif %}
+            {% if user.is_admin or user == review.user %}
+                <a href="{% url 'review:delete' movie.id review.id %}">Delete here</a>
+            {% endif %}
+        </div>
     </div>
-    {% if user == review.user%}
-        <a href="{% url 'review:update' movie.id review.id %}">Update here</a>
-    {% endif %}
-    {% if user.is_admin or user == review.user %}
-        <a href="{% url 'review:delete' movie.id review.id %}">Delete here</a>
-    {% endif %}
+
 {% endblock %}
