@@ -22,7 +22,6 @@ class DeleteReviewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Review.objects.filter(id=1).exists())
 
-    # TODO: write this test
     def test_that_deleting_a_review_causes_the_average_rating_of_a_movie_to_be_recalculated(self):
         movie = Movie.objects.filter(id=self.movie1.id).get()
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)

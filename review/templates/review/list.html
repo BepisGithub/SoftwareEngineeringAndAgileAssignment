@@ -10,7 +10,7 @@
                 <strong>{{review.title}}</strong>
                 <p>{{review.message}}</p>
                 <div>
-                    <p>Rating: {{review.rating_out_of_five}}</p>
+                    <p>Rating out of five: {{review.rating_out_of_five}}</p>
                     <p>Posted on {{review.date_posted}}</p>
                 </div>
                 <a href="{% url 'review:detail' movie.id review.id %}">Read more</a>

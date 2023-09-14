@@ -72,7 +72,6 @@ class ReviewCreateView(LoginRequiredMixin, generic.CreateView):
         return response
 
 
-# TODO: Whenever the rating is displayed, append "/5" to it so people know the rating is out of 5 not 10
 class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Review
     fields = ['title', 'message', 'rating_out_of_five']
