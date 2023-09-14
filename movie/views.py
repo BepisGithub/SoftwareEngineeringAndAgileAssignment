@@ -8,13 +8,13 @@ from django.views import generic
 
 class MovieListView(generic.ListView):
     model = Movie
-    template_name = 'movie/index.html'
+    template_name = 'movie/list.html'
     context_object_name = 'movies'
 
 
 class MovieDetailView(generic.DetailView):
     model = Movie
-    template_name = 'movie/display.html'
+    template_name = 'movie/detail.html'
     context_object_name = 'movie'
 
     def get_context_data(self, **kwargs):

@@ -32,7 +32,7 @@ class ReviewListView(generic.ListView):
 
 class ReviewDetailView(generic.DetailView):
     model = Review
-    template_name = 'review/display.html'
+    template_name = 'review/detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 from movie.models import Movie
 
+
 # Relatively few tests are required for this since there is no way for any user (apart from the site owner) to create,
 # update or delete any
 
@@ -21,17 +22,17 @@ class MovieTestCase(TestCase):
         )
 
     def test_movie_list_view(self):
-        response = self.client.get(reverse('index'))
+        response = self.client.get(reverse('list'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'movie/index.html')
+        self.assertTemplateUsed(response, 'movie/list.html')
 
-    def test_movie_display_view(self):
-        response = self.client.get(reverse('display', kwargs={'pk': 1}))
+    def test_movie_detail_view(self):
+        response = self.client.get(reverse('detail', kwargs={'pk': 1}))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'movie/display.html')
+        self.assertTemplateUsed(response, 'movie/detail.html')
 
     def test_that_movie_title_cannot_exceed_100_chars(self):
-        self.movie.title = 'A'*101
+        self.movie.title = 'A' * 101
 
         with self.assertRaises(ValidationError):
             self.movie.full_clean()
