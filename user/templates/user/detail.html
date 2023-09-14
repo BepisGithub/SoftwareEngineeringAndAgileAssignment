@@ -1,17 +1,21 @@
 {% extends 'base.html' %}
 {% block title %} User profile for {{displayed_user.username}} {% endblock %}
 {% block body %}
-    <h1>User profile</h1>
-    <div>
-        <h2>Username: {{displayed_user.username}}</h2>
-        <p> First name: {{displayed_user.first_name}}</p>
-        <p> Last name: {{displayed_user.last_name}}</p>
-        <p> Email : {{displayed_user.email}}</p>
-        <p> Admin status: {{displayed_user.is_admin}}</p>
-        {% if user.is_authenticated and user == displayed_user %}
-            <p> Out of date information? <a href="{% url 'user:update' displayed_user.id %}">Update your details</a></p>
-            <p> Want to change your password? <a href="{% url 'change_password' %}">You can do so here</a></p>
-            <p> Want to delete your account? <a href="{% url 'user:delete' displayed_user.id %}">You can do so here</a></p>
-        {% endif %}
+<h1>User profile</h1>
+    <div class="card">
+        <div class="card-body">
+            <div>
+                <h2 class="card-title">Username: {{displayed_user.username}}</h2>
+                <p class="card-text"> First name: {{displayed_user.first_name}}</p>
+                <p class="card-text"> Last name: {{displayed_user.last_name}}</p>
+                <p class="card-text"> Email : {{displayed_user.email}}</p>
+                <p class="card-subtitle mb-2 text-muted"> Admin status: {{displayed_user.is_admin}}</p>
+                {% if user.is_authenticated and user == displayed_user %}
+                    <p> Out of date information? <a href="{% url 'user:update' displayed_user.id %}" class="card-link">Update your details</a></p>
+                    <p> Want to change your password? <a href="{% url 'change_password' %}" class="card-link">You can do so here</a></p>
+                    <p> Want to delete your account? <a href="{% url 'user:delete' displayed_user.id %}" class="card-link">You can do so here</a></p>
+                {% endif %}
+            </div>
+        </div>
     </div>
 {% endblock %}

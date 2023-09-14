@@ -2,10 +2,10 @@
 {% block title %} Users {% endblock %}
 {% block body %}
     <h1>Users</h1>
+    <ul class="list-group">
     {% for user in users %}
-      <div>
-        <p>{{ user.username }} <a href="{% url 'user:detail' user.id %}">See more</a></p>
-      </div>
+        <li class="list-group-item py-4"><a href="{% url 'user:detail' user.id %}">{{ user.username }} </a></li>
     {% endfor %}
+    </ul>
     {% include 'base_pagination.html' with page_obj=page_obj %}
 {% endblock %}

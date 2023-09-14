@@ -14,7 +14,7 @@ class UserListView(generic.ListView):
     model = User
     template_name = 'user/list.html'
     context_object_name = 'users'
-    paginate_by = 5
+    paginate_by = 8
 
 
 class UserDetailView(generic.DetailView):
