@@ -10,5 +10,10 @@
         {% block button %}
         <button class="btn btn-primary" type="submit">{% block button_text %} {% endblock %}</button>
         {% endblock %}
+        {% block back_button %}
+        <a href="javascript:history.back()"><button class="btn btn-primary" type="button">Go back</button></a>
+        {% endblock %}
+
+
     </form>
 {% endblock %}
