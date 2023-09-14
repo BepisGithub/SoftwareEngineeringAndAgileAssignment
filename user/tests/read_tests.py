@@ -14,6 +14,10 @@ class ReadUserTestCase(BaseTestCase):
         self.assertTemplateUsed(response, 'user/list.html')
 
     def test_user_detail_view(self):
-        response = self.client.get(reverse('user:detail', kwargs={'pk': 1}))
+        response = self.client.get(reverse('user:detail', args=[1]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user/detail.html')
+
+    def test_that_user_is_redirected_to_where_they_were_before_after_logging_in(self):
+        self.client.logout()
+        response = self.client.get(reverse('review:list', args=[1]))
