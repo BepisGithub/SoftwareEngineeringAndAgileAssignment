@@ -4,9 +4,11 @@
 
 {% block body %}
     <h1>{{movie.title}}</h1>
-    <p>Description: {{movie.description}}</p>
-    <p>Released on: {{movie.date_released}}</p>
-    <p>Duration: {{movie.duration}}</p>
+    <div class="container-fluid">
+        <p>Description: {{movie.description}}</p>
+        <p>Released on: {{movie.date_released}}</p>
+        <p>Duration: {{movie.duration}}</p>
+    </div>
     {% if has_reviews %}
         <h2>Average rating out of five: {{movie.average_rating_out_of_five}}</h2>
         <a href="{% url 'review:list' movie.id %}">See all reviews here!</a>
