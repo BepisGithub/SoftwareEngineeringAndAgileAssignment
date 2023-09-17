@@ -1,5 +1,5 @@
 <h3 class="card-title">{{review.title}}</h3>
-<h6 class="card-subtitle mb-2 text-muted">Written by {{review.user}}</h6>
+<h6 class="card-subtitle mb-2 text-muted">Written by <a href="{% url 'user:detail' review.user.id %}">{{review.user}} </a></h6>
 <p>{{review.message}}</p>
 <div>
     <p>Rating out of five: {{review.rating_out_of_five}}</p>
