@@ -19,8 +19,9 @@ class Review(models.Model):
         on_delete=models.CASCADE  # this means that if the movie is deleted, the reviews for it will be too.
     )
 
-    # MySQL allows for over 60,000 characters in the varchar type, which is what the charfield is stored as, making it
-    # big enough for all types of text in the review model.
+    # SQLite allows for over 500,000,000 characters in the varchar type, which is what the charfield is stored as,
+    # making it big enough for all types of text in the review model. This, however, is a ridiculous size
+    # and must be limited.
 
     # 100 characters is more than enough to have a concise review title
     title = models.CharField(max_length=100)
