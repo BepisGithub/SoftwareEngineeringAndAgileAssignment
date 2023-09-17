@@ -12,7 +12,7 @@ class UpdateUserTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user/update_user_form.html')
 
-    def test_that_an_authenticated_user_can_update_his_username(self):
+    def test_that_an_authenticated_user_can_update_their_username(self):
         updated_details = {
             'username': 'new_username',
         }
@@ -21,7 +21,7 @@ class UpdateUserTestCase(BaseTestCase):
         self.user.refresh_from_db()
         self.assertEqual(self.user.username, updated_details['username'])
 
-    def test_that_an_authenticated_user_cannot_set_his_username_to_empty(self):
+    def test_that_an_authenticated_user_cannot_set_their_username_to_empty(self):
         updated_details = {
             'username': '',
         }
@@ -29,7 +29,7 @@ class UpdateUserTestCase(BaseTestCase):
         self.user.refresh_from_db()
         self.assertNotEqual(self.user.username, updated_details['username'])
 
-    def test_that_a_user_cannot_set_his_username_to_another_username_that_is_in_use(self):
+    def test_that_a_user_cannot_set_their_username_to_another_username_that_is_in_use(self):
         updated_details = {
             'username': self.another_user.username,
         }
@@ -37,7 +37,7 @@ class UpdateUserTestCase(BaseTestCase):
         self.user.refresh_from_db()
         self.assertNotEqual(self.user.username, updated_details['username'])
 
-    def test_that_an_authenticated_user_can_update_his_first_name_to_a_new_value(self):
+    def test_that_an_authenticated_user_can_update_their_first_name_to_a_new_value(self):
         updated_details = {
             'first_name': 'newname'
         }
@@ -45,7 +45,7 @@ class UpdateUserTestCase(BaseTestCase):
         self.user.refresh_from_db()
         self.assertNotEqual(self.user.username, updated_details['first_name'])
 
-    def test_that_an_authenticated_user_can_update_his_first_name_to_empty(self):
+    def test_that_an_authenticated_user_can_update_their_first_name_to_empty(self):
         updated_details = {
             'first_name': ''
         }
@@ -53,7 +53,7 @@ class UpdateUserTestCase(BaseTestCase):
         self.user.refresh_from_db()
         self.assertNotEqual(self.user.username, updated_details['first_name'])
 
-    def test_that_an_authenticated_user_can_update_his_last_name_to_a_new_value(self):
+    def test_that_an_authenticated_user_can_update_their_last_name_to_a_new_value(self):
         updated_details = {
             'last_name': 'newname'
         }
@@ -61,7 +61,7 @@ class UpdateUserTestCase(BaseTestCase):
         self.user.refresh_from_db()
         self.assertNotEqual(self.user.username, updated_details['last_name'])
 
-    def test_that_an_authenticated_user_can_update_his_last_name_to_empty(self):
+    def test_that_an_authenticated_user_can_update_their_last_name_to_empty(self):
         updated_details = {
             'last_name': ''
         }
@@ -69,7 +69,7 @@ class UpdateUserTestCase(BaseTestCase):
         self.user.refresh_from_db()
         self.assertNotEqual(self.user.username, updated_details['last_name'])
 
-    def test_that_an_authenticated_user_can_update_his_email(self):
+    def test_that_an_authenticated_user_can_update_their_email(self):
         updated_details = {
             'email': 'new@email.com'
         }
@@ -77,7 +77,7 @@ class UpdateUserTestCase(BaseTestCase):
         self.user.refresh_from_db()
         self.assertNotEqual(self.user.username, updated_details['email'])
 
-    def test_that_an_authenticated_user_cannot_update_his_email_to_empty(self):
+    def test_that_an_authenticated_user_cannot_update_their_email_to_empty(self):
         updated_details = {
             'email': ''
         }

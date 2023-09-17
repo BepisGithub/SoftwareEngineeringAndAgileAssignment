@@ -10,13 +10,13 @@ from movie.models import Movie
 
 class DeleteReviewTestCase(BaseTestCase):
 
-    def test_that_an_authenticated_user_can_see_the_delete_confirmation_for_his_review(self):
+    def test_that_an_authenticated_user_can_see_the_delete_confirmation_for_their_review(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         response = self.client.get(reverse('review:delete', args=[self.movie1.id, 1]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'review/review_confirm_delete.html')
 
-    def test_that_an_authenticated_user_can_delete_his_review(self):
+    def test_that_an_authenticated_user_can_delete_their_review(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         response = self.client.post(reverse('review:delete', args=[self.movie1.id, 1]))
         self.assertEqual(response.status_code, 302)
@@ -97,7 +97,7 @@ class DeleteReviewTestCase(BaseTestCase):
         response = self.client.post(reverse('review:delete', args=[self.movie1.id, 1]), follow=True)
         self.assertTemplateUsed(response, 'registration/login.html')
 
-    def test_that_deleting_a_user_also_deletes_his_reviews(self):
+    def test_that_deleting_a_user_also_deletes_their_reviews(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         self.assertTrue(Review.objects.filter(id=1).exists())
         response = self.client.post(reverse('user:delete', args=[self.user1.id]))

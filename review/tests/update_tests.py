@@ -10,13 +10,13 @@ from movie.models import Movie
 
 class UpdateReviewTestCase(BaseTestCase):
 
-    def test_that_an_authenticated_user_can_see_the_update_view_for_his_review(self):
+    def test_that_an_authenticated_user_can_see_the_update_view_for_their_review(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         response = self.client.get(reverse('review:update', args=[self.movie1.id, 1]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'review/review_form.html')
 
-    def test_that_an_authenticated_user_can_update_his_reviews_title(self):
+    def test_that_an_authenticated_user_can_update_their_reviews_title(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, 'new title', None, None)
@@ -25,7 +25,7 @@ class UpdateReviewTestCase(BaseTestCase):
         review.refresh_from_db()
         self.assertEqual(review.title, updated_details['title'])
 
-    def test_that_an_authenticated_user_cannot_update_his_reviews_title_to_empty(self):
+    def test_that_an_authenticated_user_cannot_update_their_reviews_title_to_empty(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, '', None, None)
@@ -34,7 +34,7 @@ class UpdateReviewTestCase(BaseTestCase):
         review.refresh_from_db()
         self.assertNotEqual(review.title, updated_details['title'])
 
-    def test_that_an_authenticated_user_can_update_his_reviews_message(self):
+    def test_that_an_authenticated_user_can_update_their_reviews_message(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, None, 'new message', None)
@@ -43,7 +43,7 @@ class UpdateReviewTestCase(BaseTestCase):
         review.refresh_from_db()
         self.assertEqual(review.message, updated_details['message'])
 
-    def test_that_an_authenticated_user_cannot_update_his_reviews_message_to_empty(self):
+    def test_that_an_authenticated_user_cannot_update_their_reviews_message_to_empty(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, None, '', None)
@@ -52,7 +52,7 @@ class UpdateReviewTestCase(BaseTestCase):
         review.refresh_from_db()
         self.assertNotEqual(review.message, updated_details['message'])
 
-    def test_that_an_authenticated_user_can_update_his_reviews_rating(self):
+    def test_that_an_authenticated_user_can_update_their_reviews_rating(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, None, None, self.valid_review['rating_out_of_five'] - 1)
@@ -72,7 +72,7 @@ class UpdateReviewTestCase(BaseTestCase):
         movie.refresh_from_db()
         self.assertEqual(movie.average_rating_out_of_five, updated_details['rating_out_of_five'])
 
-    def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_empty(self):
+    def test_that_an_authenticated_user_cannot_update_their_reviews_rating_to_empty(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, None, None, '')
@@ -81,7 +81,7 @@ class UpdateReviewTestCase(BaseTestCase):
         review.refresh_from_db()
         self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
 
-    def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_less_than_one(self):
+    def test_that_an_authenticated_user_cannot_update_their_reviews_rating_to_less_than_one(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, None, None, 0)
@@ -90,7 +90,7 @@ class UpdateReviewTestCase(BaseTestCase):
         review.refresh_from_db()
         self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
 
-    def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_greater_than_five(self):
+    def test_that_an_authenticated_user_cannot_update_their_reviews_rating_to_greater_than_five(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, None, None, 6)
@@ -99,7 +99,7 @@ class UpdateReviewTestCase(BaseTestCase):
         review.refresh_from_db()
         self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
 
-    def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_a_float(self):
+    def test_that_an_authenticated_user_cannot_update_their_reviews_rating_to_a_float(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, None, None, 4.4)
@@ -108,7 +108,7 @@ class UpdateReviewTestCase(BaseTestCase):
         review.refresh_from_db()
         self.assertNotEqual(review.rating_out_of_five, updated_details['rating_out_of_five'])
 
-    def test_that_an_authenticated_user_cannot_update_his_reviews_rating_to_an_alphabetical_value(self):
+    def test_that_an_authenticated_user_cannot_update_their_reviews_rating_to_an_alphabetical_value(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         review = Review.objects.filter(id=1).get()
         updated_details = get_updated_details(self.valid_review, None, None, 'five')

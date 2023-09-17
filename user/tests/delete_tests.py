@@ -12,7 +12,7 @@ class DeleteUserTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user/user_confirm_delete.html')
 
-    def test_that_an_authenticated_user_can_delete_his_own_account(self):
+    def test_that_an_authenticated_user_can_delete_their_own_account(self):
         response = self.client.post(reverse('user:delete', args=[self.user.id]))
         self.assertFalse(User.objects.filter(id=self.user.id).exists())
 
