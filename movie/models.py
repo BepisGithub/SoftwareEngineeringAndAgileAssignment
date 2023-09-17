@@ -12,6 +12,9 @@ class Movie(models.Model):
     # for a lengthy review
     description = models.TextField()
 
+    # The source will be taken from IMDB
+    image_url = models.URLField(max_length=500, blank=True, null=True)
+
     # Stores the duration as a timedelta python object and stores the value as a bigint in the database
     # See: https://docs.djangoproject.com/en/4.2/ref/models/fields/#durationfield
     duration = models.DurationField()

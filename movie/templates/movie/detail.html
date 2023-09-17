@@ -6,6 +6,9 @@
     <div class="card">
             <div class="card-body">
                 <h1 class="card-title">{{movie.title}}</h1>
+                    {% if movie.image_url %}
+                        <img src="{{movie.image_url}}" alt="missing: cover image for {{movie.title}}">
+                    {% endif %}
                     <p class="card-text">{{movie.description}}</p>
                     <p class="card-subtitle mb-2 text-muted">Released on: {{movie.date_released}}</p>
                     <p class="card-subtitle mb-2 text-muted">Duration: {{movie.duration}}</p>
