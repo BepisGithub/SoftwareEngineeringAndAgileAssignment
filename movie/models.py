@@ -3,8 +3,6 @@ from django.db import models
 
 
 class Movie(models.Model):
-    # TODO: add an image to this, get them from IMDB.
-
     # Most movie titles are extremely short, so a 100 character length should be sufficient for any movie
     title = models.CharField(max_length=100)
 
