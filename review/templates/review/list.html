@@ -4,10 +4,16 @@
     <h1>Reviews for {{movie.title}}</h1>
     {% if reviews.exists %}
         <h2>This movie has an average rating of {{movie.average_rating_out_of_five}}</h2>
-        {% if user.is_authenticated and first_review %}
+        {% if user.is_authenticated%}
+            {% if first_review %}
                 <p>Want to add your own review?
                     <a href="{% url 'review:create' movie.id %}">Write one here!</a>
                 </p>
+            {% else %}
+                <p>Want to see your review for this movie?
+                    <a href="{% url 'review:detail' movie.id pre_existing_review.id %}">Click here</a>
+                </p>
+            {% endif %}
         {% elif not user.is_authenticated %}
                     <p><a href="{% url 'login' %}?next={{request.path}}">Login</a> to submit a review!</p>
         {% endif %}

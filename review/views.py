@@ -9,7 +9,6 @@ from movie.models import Movie
 from .models import Review
 from django.views import generic
 
-# TODO: if the user has already written a review, add a hyperlink at the top to take them there
 
 class ReviewListView(generic.ListView):
     model = Review
@@ -23,9 +22,10 @@ class ReviewListView(generic.ListView):
         context['first_review'] = True
         if not self.request.user.is_authenticated:
             return context
-        review_already_exists = Review.objects.filter(user=self.request.user, movie=context['movie']).exists()
-        if review_already_exists:
+        pre_existing_review = Review.objects.filter(user=self.request.user, movie=context['movie'])
+        if pre_existing_review.exists():
             context['first_review'] = False
+            context['pre_existing_review'] = pre_existing_review.get()
         return context
 
     def get_queryset(self):
