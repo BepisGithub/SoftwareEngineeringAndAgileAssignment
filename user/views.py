@@ -67,16 +67,34 @@ def register(request):
         first_name = form.data.get('first_name', "")
         last_name = form.data.get('last_name', "")
 
-        if (first_name and not first_name.isalpha()) or (last_name and not last_name.isalpha()):
+        if first_name and not first_name.isalpha():
             form.add_error('first_name', "Names cannot have digits")
+
+        if last_name and not last_name.isalpha():
             form.add_error('last_name', "Names cannot have digits")
-            messages.error(request, "Names cannot have digits")
-            return render(request, 'user/register.html', {'form': form})
 
         if form.is_valid():
             new_user = form.save()
             login(request, new_user)
             return redirect('/')
+        else:
+            # This is the error from the user model that is raised when the names have numbers, we do not need this
+            # Since we are doing another check here to get which names specifically have numbers
+            del form.errors['__all__']
+
+            # Removing the underscore in the key name
+            form.errors['first name'] = form.errors['first_name']
+            del form.errors['first_name']
+            form.errors['last name'] = form.errors['last_name']
+            del form.errors['last_name']
+
+            # Renaming the password errors
+            form.errors['password'] = form.errors['password2']
+            del form.errors['password2']
+
+
+
+
     else:
         form = UserRegistrationForm()
     return render(request, 'user/register.html', {'form': form})
