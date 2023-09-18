@@ -67,7 +67,7 @@ def register(request):
         first_name = form.data.get('first_name', "")
         last_name = form.data.get('last_name', "")
 
-        if not first_name.isalpha() or not last_name.isalpha():
+        if (first_name and not first_name.isalpha()) or (last_name and not last_name.isalpha()):
             form.add_error('first_name', "Names cannot have digits")
             form.add_error('last_name', "Names cannot have digits")
             messages.error(request, "Names cannot have digits")
