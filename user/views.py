@@ -39,6 +39,8 @@ class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
         # This is to fix a bug where when trying to change a username to one that is taken, the updated username shows
         # in the navbar, like "Hello, (taken username)" which is extremely confusing for the user since the username
         # change did not take place. Hence, this fix
+        form.errors['first and last names'] = form.errors['__all__']
+        del form.errors['__all__']
         self.request.user = User.objects.get(id=self.kwargs['pk'])
         return super().form_invalid(form)
 
