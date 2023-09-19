@@ -58,7 +58,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'error.log',
+            'filename': 'form_errors.log',
             'maxBytes': 5 * 1024 * 1024,
             'backupCount': 1,
             'formatter': 'verbose'
