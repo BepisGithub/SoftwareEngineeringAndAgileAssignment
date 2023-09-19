@@ -22,8 +22,8 @@ from user.views import register
 
 from user.views import CustomPasswordChangeView
 
+# A mapping of urls to views
 urlpatterns = [
-    # path('admin/', admin.site.urls),
     path('movies/', include('movie.urls')),
     path('', include('movie.urls')),
     path('login/', auth_views.LoginView.as_view(), name='login'),

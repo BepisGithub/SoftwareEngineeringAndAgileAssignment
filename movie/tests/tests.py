@@ -6,12 +6,14 @@ from datetime import datetime, timedelta
 from movie.models import Movie
 
 
-# Relatively few tests are required for this since there is no way for any user (apart from the site owner) to create,
-# update or delete any
+# Relatively few tests are required for this since there is no way for any user (apart from the site owner) to do any
+# of the CRUD operations, hence we can have them all in one file
 
 class MovieTestCase(TestCase):
     def setUp(self):
         self.client = Client()
+
+        # Creating a test movie
         self.movie = Movie.objects.create(
             id=1,
             title='Test Movie',
@@ -21,13 +23,17 @@ class MovieTestCase(TestCase):
             average_rating_out_of_five=None
         )
 
+    # Read tests
+
+    # Checks that the list of movies is displayed
     def test_movie_list_view(self):
         response = self.client.get(reverse('list'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)  # 200 indicates the request succeeded
         self.assertTemplateUsed(response, 'movie/list.html')
 
+    # Checks that an individual movie can be displayed
     def test_movie_detail_view(self):
-        response = self.client.get(reverse('detail', args=[1]))
+        response = self.client.get(reverse('detail', kwargs={'pk': 1}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'movie/detail.html')
 

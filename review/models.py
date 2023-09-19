@@ -36,15 +36,12 @@ class Review(models.Model):
         ]
     )
 
+    # This field is automatically set
     date_posted = models.DateTimeField(auto_now_add=True)
 
     # This should be blank until the review has been edited at least once
     date_last_edited = models.DateTimeField(null=True, blank=True)
 
-    def __str__(self):
-        return "Written by: " + str(self.user.username) + " for movie: " + str(self.movie.title) + " title: " \
-               + str(self.title) + " message: " + str(self.message) + " rating out of 5: " + str(self.rating_out_of_five) \
-               + " posted on: " + str(self.date_posted) + " last edited: " + str(self.date_last_edited)
-
+    # This enforces the constraint of a user only being able to write one review per movie
     class Meta:
         unique_together = ('user', 'movie')

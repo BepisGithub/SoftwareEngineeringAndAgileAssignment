@@ -50,16 +50,21 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
+            # Display the type of log (e.g. debug, warning, etc.), the time, the module/app origin and the message
             'format': '{levelname} {asctime} {module} {message}',
             'style': '{',
         }
     },
     'handlers': {
         'file': {
+            # Show debug level information
             'level': 'DEBUG',
+            # Rotating file handler can be used to rotate the log files
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'form_errors.log',
-            'maxBytes': 5 * 1024 * 1024,
+            'maxBytes': 5 * 1024 * 1024,  # 5MB
+            # Have one old log file and one current log file (when the file is bigger than maxBytes, the oldest file is
+            # removed
             'backupCount': 1,
             'formatter': 'verbose'
         }
@@ -80,7 +85,6 @@ INSTALLED_APPS = [
     'movie',
     'user',
     'review',
-    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',

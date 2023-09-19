@@ -5,9 +5,11 @@ from movie.models import Movie
 from datetime import timedelta, datetime
 
 
+# Common class shared between all the review test files
 class BaseTestCase(TestCase):
     def setUp(self):
         self.client = Client()
+        # Create two users
         self.user1 = User.objects.create(
             username='test_user',
             email="JDoe@email.com",
@@ -23,6 +25,7 @@ class BaseTestCase(TestCase):
         )
         self.user2.save()
 
+        # Create 2 movies
         self.movie1 = Movie.objects.create(
             id=1,
             title='Test Movie',
@@ -45,29 +48,26 @@ class BaseTestCase(TestCase):
 
         self.movie2.save()
 
-        self.valid_review = {
+        # Constants
+
+        self.VALID_REVIEW = {
             'title': 'review title',
             'message': 'review message',
             'rating_out_of_five': 5,
         }
 
-        self.invalid_review = {
-            'title': '',
-            'message': '',
-            'rating_out_of_five': 6
-        }
-
-        self.second_review = {
+        self.SECOND_REVIEW = {
             'title': 'second review title',
             'message': 'second review message',
             'rating_out_of_five': 5,
         }
 
 
+# This method is passed a review and then there are optional parameters to modify each of the review fields
 def get_updated_details(review_dict, title=None, message=None, rating_out_of_five=None):
-    # is not None is necessary because an empty string will evaluate to false
-    # but we may want it to be empty for testing purposes
 
+    # the is not None check in the conditional is necessary because an empty string will evaluate to false
+    # , but we may want to set the value to an empty string for certain tests
     if title is not None:
         review_dict['title'] = title
     if message is not None:

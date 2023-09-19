@@ -24,17 +24,8 @@ class Movie(models.Model):
     average_rating_out_of_five = models.DecimalField(
         null=True,
         blank=True,
+        # We will have one decimal place to balance between accuracy and readability
         decimal_places=1,
         max_digits=2,
         validators=[DecimalValidator(max_digits=2, decimal_places=1)]
     )
-
-    def __str__(self):
-        return "title: " + str(self.title) + " description: "\
-               + str(self.description) + " duration: " + str(self.duration) + " date_release: " + str(self.date_released) + \
-               " average rating out of five: " + str(self.average_rating_out_of_five)
-
-    # Django by default appends the app name before the class name for the table title, this statement
-    # renames the table for a cleaner naming convention (so the table is called Movie instead of movie_movie)
-    class Meta:
-        db_table = 'Movie'

@@ -19,6 +19,7 @@ class User(AbstractUser):
     # may change and evolve
     is_admin = models.BooleanField(default=False)
 
+    # Forms clean data, which means the first and last name are validated to have only alphabetical chars
     def clean(self):
         super().clean()
         # if names are present AND they have digits
