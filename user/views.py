@@ -35,12 +35,23 @@ class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
             raise PermissionDenied('You cannot update someone else\'s user profile!')
         return self.request.user
 
+    def form_valid(self, form):
+        if not form.instance.email:
+            form.add_error('email', "email must be present")
+            return super().form_invalid(form)
+        return super().form_valid(form)
+
     def form_invalid(self, form):
         # This is to fix a bug where when trying to change a username to one that is taken, the updated username shows
         # in the navbar, like "Hello, (taken username)" which is extremely confusing for the user since the username
         # change did not take place. Hence, this fix
-        form.errors['first and last names'] = form.errors['__all__']
-        del form.errors['__all__']
+        if '__all__' in form.errors:
+            form.errors['first and last names'] = form.errors['__all__']
+            del form.errors['__all__']
+
+        if not form.instance.email:
+            form.add_error('email', "email must be present")
+
         self.request.user = User.objects.get(id=self.kwargs['pk'])
         return super().form_invalid(form)
 
@@ -82,17 +93,21 @@ def register(request):
         else:
             # This is the error from the user model that is raised when the names have numbers, we do not need this
             # Since we are doing another check here to get which names specifically have numbers
-            del form.errors['__all__']
+            if '__all__' in form.errors:
+                del form.errors['__all__']
 
             # Removing the underscore in the key name
-            form.errors['first name'] = form.errors['first_name']
-            del form.errors['first_name']
-            form.errors['last name'] = form.errors['last_name']
-            del form.errors['last_name']
+            if 'first_name' in form.errors:
+                form.errors['first name'] = form.errors['first_name']
+                del form.errors['first_name']
+            if 'last_name' in form.errors:
+                form.errors['last name'] = form.errors['last_name']
+                del form.errors['last_name']
 
             # Renaming the password errors
-            form.errors['password'] = form.errors['password2']
-            del form.errors['password2']
+            if 'password2' in form.errors:
+                form.errors['password'] = form.errors['password2']
+                del form.errors['password2']
 
 
 
