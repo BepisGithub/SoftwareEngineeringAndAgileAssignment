@@ -3,7 +3,7 @@
 {% block form_title %} {{action}} review for {{movie.title}} {% endblock %}
 
 {% block form %}
-{{ form.as_p }}
+{% include 'form_div.html' with form=form %}
 {% endblock %}
 
 {% block button_text %} {{action}} review {% endblock %}

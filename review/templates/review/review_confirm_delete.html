@@ -7,7 +7,7 @@
         {% include 'review/review_div.html' with review=review %}
     </div>
 </div>
-{{ form.as_p }}
+{% include 'form_div.html' with form=form %}
 {% endblock %}
 
 {% block button %}
