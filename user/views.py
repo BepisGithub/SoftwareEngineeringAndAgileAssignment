@@ -36,6 +36,7 @@ class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
         return self.request.user
 
     def form_valid(self, form):
+        self.request.user = User.objects.get(id=self.kwargs['pk'])
         if not form.instance.email:
             form.add_error('email', "email must be present")
             return super().form_invalid(form)
