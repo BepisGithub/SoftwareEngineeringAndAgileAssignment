@@ -3,7 +3,7 @@
 {% block form_title %} Login {% endblock %}
 
 {% block form %}
-{{ form.as_p }}
+{% include 'form_div.html' with form=form %}
 <p>If you don't have an account, <a href="{% url 'register' %}">create one here!</a> </p>
 {% endblock %}
 
