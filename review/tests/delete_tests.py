@@ -38,8 +38,6 @@ class DeleteReviewTestCase(BaseTestCase):
         self.assertTemplateNotUsed(response, 'review/list.html')
         self.assertTemplateUsed(response, 'movie/detail.html')
 
-
-
     def test_that_an_authenticated_user_cannot_see_the_delete_confirmation_for_anothers_review(self):
         create_review_for_movie(self.client, self.valid_review, self.movie1.id)
         self.client.logout()

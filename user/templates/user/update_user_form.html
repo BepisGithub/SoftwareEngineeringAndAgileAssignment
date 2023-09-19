@@ -3,7 +3,11 @@
 {% block form_title %} Update user {% endblock %}
 
 {% block form %}
-{{ form.as_p }}
+{% include 'form_div.html' with form=form %}
 {% endblock %}
 
 {% block button_text %} Update user {% endblock %}
+
+{% block back_button %}
+        <a href="{% url 'user:detail' displayed_user.id %}"><button class="btn btn-primary" type="button">Go back</button></a>
+{% endblock %}

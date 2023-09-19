@@ -3,7 +3,7 @@
 {% block form_title %} Are you sure you want to delete your profile, {{displayed_user.username}}? This will also delete ALL of your reviews {% endblock %}
 
 {% block form %}
-{{ form.as_p }}
+{% include 'form_div.html' with form=form %}
 {% endblock %}
 
 {% block button %}
