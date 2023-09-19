@@ -43,7 +43,7 @@ class UpdateUserTestCase(BaseTestCase):
         }
         response = self.client.post(reverse('user:update', args=[self.user.id]), updated_details)
         self.user.refresh_from_db()
-        self.assertNotEqual(self.user.username, updated_details['first_name'])
+        self.assertEqual(self.user.username, updated_details['first_name'])
 
     def test_that_an_authenticated_user_can_update_their_first_name_to_empty(self):
         updated_details = {
@@ -51,7 +51,7 @@ class UpdateUserTestCase(BaseTestCase):
         }
         response = self.client.post(reverse('user:update', args=[self.user.id]), updated_details)
         self.user.refresh_from_db()
-        self.assertNotEqual(self.user.username, updated_details['first_name'])
+        self.assertEqual(self.user.username, updated_details['first_name'])
 
     def test_that_an_authenticated_user_can_update_their_last_name_to_a_new_value(self):
         updated_details = {
@@ -59,7 +59,7 @@ class UpdateUserTestCase(BaseTestCase):
         }
         response = self.client.post(reverse('user:update', args=[self.user.id]), updated_details)
         self.user.refresh_from_db()
-        self.assertNotEqual(self.user.username, updated_details['last_name'])
+        self.assertEqual(self.user.username, updated_details['last_name'])
 
     def test_that_an_authenticated_user_can_update_their_last_name_to_empty(self):
         updated_details = {
@@ -67,7 +67,7 @@ class UpdateUserTestCase(BaseTestCase):
         }
         response = self.client.post(reverse('user:update', args=[self.user.id]), updated_details)
         self.user.refresh_from_db()
-        self.assertNotEqual(self.user.username, updated_details['last_name'])
+        self.assertEqual(self.user.username, updated_details['last_name'])
 
     def test_that_an_authenticated_user_can_update_their_email(self):
         updated_details = {
@@ -75,7 +75,7 @@ class UpdateUserTestCase(BaseTestCase):
         }
         response = self.client.post(reverse('user:update', args=[self.user.id]), updated_details)
         self.user.refresh_from_db()
-        self.assertNotEqual(self.user.username, updated_details['email'])
+        self.assertEqual(self.user.username, updated_details['email'])
 
     def test_that_an_authenticated_user_cannot_update_their_email_to_empty(self):
         updated_details = {
