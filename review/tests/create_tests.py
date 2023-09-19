@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.db import IntegrityError
 from django.urls import reverse
 
@@ -106,3 +108,12 @@ class CreateReviewTestCase(BaseTestCase):
         invalid_review['rating_out_of_five'] = 'a'
         response = create_review_for_movie(self.client, invalid_review, self.movie1.id)
         self.assertFalse(Review.objects.filter(movie=self.movie1).exists())
+
+    @patch('review.views.logger')
+    def test_that_logging_occurs_when_trying_to_create_an_invalid_review(self, mock_logger):
+        invalid_review = self.valid_review
+        invalid_review['rating_out_of_five'] = 6
+        response = create_review_for_movie(self.client, invalid_review, self.movie1.id)
+        self.assertFalse(Review.objects.filter(movie=self.movie1).exists())
+        self.assertTrue(mock_logger.warning.called)
+

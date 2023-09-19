@@ -51,6 +51,12 @@ class BaseTestCase(TestCase):
             'rating_out_of_five': 5,
         }
 
+        self.invalid_review = {
+            'title': '',
+            'message': '',
+            'rating_out_of_five': 6
+        }
+
         self.second_review = {
             'title': 'second review title',
             'message': 'second review message',

@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.test import TestCase, Client
 from user.models import User
 from django.urls import reverse
@@ -112,3 +114,11 @@ class UpdateUserTestCase(BaseTestCase):
         self.client.logout()
         response = self.client.get(reverse('user:update', args=[1]), follow=True)
         self.assertTemplateUsed(response, 'registration/login.html')
+
+    @patch('user.views.logger')
+    def test_that_logging_occurs_when_updating_a_user_with_invalid_input(self, mock_logger):
+        updated_details = get_invalid_account_details()
+        response = self.client.post(reverse('user:update', args=[self.user.id]), updated_details)
+        self.user.refresh_from_db()
+        self.assertNotEqual(self.user.username, updated_details['username'])
+        self.assertTrue(mock_logger.warning.called)

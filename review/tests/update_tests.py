@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.urls import reverse
 
 from review.models import Review
@@ -202,3 +204,10 @@ class UpdateReviewTestCase(BaseTestCase):
         updated_details = get_updated_details(self.valid_review, 'new title', 'new message', 1)
         response = self.client.post(reverse('review:update', args=[self.movie1.id, 1]), updated_details, follow=True)
         self.assertTemplateUsed(response, 'registration/login.html')
+
+    @patch('review.views.logger')
+    def test_that_logging_occurs_when_updating_a_review_with_invalid_input(self, mock_logger):
+        updated_details = get_updated_details(self.valid_review, None, None, 6)
+        response = create_review_for_movie(self.client, updated_details, self.movie1.id)
+        self.assertFalse(Review.objects.filter(movie=self.movie1).exists())
+        self.assertTrue(mock_logger.warning.called)

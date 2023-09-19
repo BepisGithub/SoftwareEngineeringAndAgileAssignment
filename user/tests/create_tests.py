@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.core.exceptions import ValidationError
 from django.test import TestCase, Client
 from user.models import User
@@ -53,3 +55,10 @@ class CreateUserTestCase(BaseTestCase):
         # In Django, unsuccessful updates cause the view to rerender the form which means no redirect thus a 200 code
         self.assertEqual(response.status_code, 200)
         self.assertFalse(User.objects.filter(username=invalid_details['username']).exists())
+
+    @patch('user.views.logger')
+    def test_that_logging_occurs_when_creating_a_user_with_invalid_input(self, mock_logger):
+        invalid_details = get_invalid_account_details()
+        response = self.client.post(reverse('register'), invalid_details)
+        self.assertFalse(User.objects.filter(username=invalid_details['username']).exists())
+        self.assertTrue(mock_logger.warning.called)
