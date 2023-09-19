@@ -44,6 +44,35 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 
+# Logging configuration to capture form errors
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        }
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'error.log',
+            'maxBytes': 5 * 1024 * 1024,
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'logger': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True
+        }
+    }
+}
+
+
 # Application definition
 
 INSTALLED_APPS = [

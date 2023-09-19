@@ -1,13 +1,19 @@
-from django.contrib.auth import login
+import logging
+
+from django.contrib.auth import login, user_login_failed
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.contrib.auth.views import PasswordChangeView
 from django.core.exceptions import PermissionDenied
+from django.dispatch import receiver
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 from .forms import UserRegistrationForm
 from .models import User
+
+logger = logging.getLogger('logger')
 
 
 class UserListView(generic.ListView):
@@ -39,6 +45,8 @@ class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
         self.request.user = User.objects.get(id=self.kwargs['pk'])
         if not form.instance.email:
             form.add_error('email', "email must be present")
+            logger.warning('User profile update by user ' + self.request.user.username + ' failed. Form errors: '
+                           + str(form.errors))
             return super().form_invalid(form)
         return super().form_valid(form)
 
@@ -54,6 +62,9 @@ class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
             form.add_error('email', "email must be present")
 
         self.request.user = User.objects.get(id=self.kwargs['pk'])
+
+        logger.warning('User profile update by user ' + self.request.user.username + ' failed. Form errors: '
+                       + str(form.errors))
         return super().form_invalid(form)
 
     def get_success_url(self):
@@ -72,8 +83,11 @@ class UserDeleteView(LoginRequiredMixin, generic.DeleteView):
         return self.request.user
 
 
+class CustomPasswordChangeView(PasswordChangeView):
+    def form_invalid(self, form):
+        logger.warning('Password change failed for username: ' + form.user.username)
+        return super().form_invalid(form)
 
-# TODO: add a forgot account/forgot details option
 
 def register(request):
     if request.method == 'POST':
@@ -110,9 +124,13 @@ def register(request):
                 form.errors['password'] = form.errors['password2']
                 del form.errors['password2']
 
-
-
+            logger.warning('User creation failed. Form errors: ' + str(form.errors))
 
     else:
         form = UserRegistrationForm()
     return render(request, 'user/register.html', {'form': form})
+
+
+@receiver(user_login_failed)
+def user_login_failed_callback(sender, credentials, **kwargs):
+    logger.warning('User login failed for username: ' + str(credentials['username']))

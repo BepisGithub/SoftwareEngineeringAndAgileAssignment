@@ -15,11 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.contrib.auth.views import PasswordChangeView
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
 from user.views import register
+
+from user.views import CustomPasswordChangeView
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -27,7 +28,7 @@ urlpatterns = [
     path('', include('movie.urls')),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('change-password/', PasswordChangeView.as_view(), name='change_password'),
+    path('change-password/', CustomPasswordChangeView.as_view(), name='change_password'),
     path('register/', register, name='register'),
     path('users/', include('user.urls'))
     # TODO: implement the password reset using PasswordResetView if there's time

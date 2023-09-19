@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
@@ -8,6 +10,8 @@ from datetime import datetime
 from movie.models import Movie
 from .models import Review
 from django.views import generic
+
+logger = logging.getLogger('logger')
 
 
 class ReviewListView(generic.ListView):
@@ -75,6 +79,11 @@ class ReviewCreateView(LoginRequiredMixin, generic.CreateView):
         update_average_rating_for_movie(form.instance.movie)
         return response
 
+    def form_invalid(self, form):
+        logger.warning('Review creation by user ' + self.request.user.username + ' failed. Form errors: '
+                       + str(form.errors))
+        return super().form_invalid(form)
+
 
 class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Review
@@ -103,6 +112,11 @@ class ReviewUpdateView(LoginRequiredMixin, generic.UpdateView):
         update_average_rating_for_movie(form.instance.movie)
         return response
 
+    def form_invalid(self, form):
+        logger.warning('Review update by user ' + self.request.user.username + 'for review id ' +
+                       str(self.kwargs['review_id']) + 'failed. Form errors: ' + str(form.errors))
+        return super().form_invalid(form)
+
 
 class ReviewDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Review
@@ -114,7 +128,6 @@ class ReviewDeleteView(LoginRequiredMixin, generic.DeleteView):
             return reverse_lazy('review:list', kwargs={'pk': self.kwargs['pk']})
         else:
             return reverse_lazy('detail', kwargs={'pk': self.kwargs['pk']})
-
 
     def get_object(self, queryset=None):
         review = Review.objects.filter(id=self.kwargs['review_id']).get()
