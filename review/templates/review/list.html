@@ -22,7 +22,6 @@
             <div class="card">
                 <div class="card-body">
                     {% include 'review/review_div.html' with review=review %}
-<!--                    TODO: remove the underline from anchor elements -->
                     <a href="{% url 'review:detail' movie.id review.id %}" class="card-link" >Read more</a>
                 </div>
             </div>

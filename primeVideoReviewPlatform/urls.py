@@ -31,5 +31,4 @@ urlpatterns = [
     path('change-password/', CustomPasswordChangeView.as_view(), name='change_password'),
     path('register/', register, name='register'),
     path('users/', include('user.urls'))
-    # TODO: implement the password reset using PasswordResetView if there's time
 ]
