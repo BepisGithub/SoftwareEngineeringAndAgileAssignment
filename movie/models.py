@@ -1,6 +1,8 @@
 from django.core.validators import DecimalValidator
 from django.db import models
 
+from primeVideoReviewPlatform import settings
+
 
 class Movie(models.Model):
     # Most movie titles are extremely short, so a 100 character length should be sufficient for any movie
@@ -29,3 +31,6 @@ class Movie(models.Model):
         max_digits=2,
         validators=[DecimalValidator(max_digits=2, decimal_places=1)]
     )
+
+    def set_local_image_url(self, filename):
+        self.image_url = settings.MEDIA_URL + filename
