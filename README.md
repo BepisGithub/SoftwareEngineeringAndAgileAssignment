@@ -17,6 +17,10 @@ python manage.py test user.tests
 
 # How to run the app and test it locally
 
+This program uses python 3.9 and django
+
+You must have python 3.9 and django installed to run this project
+
 Open the command line and navigate to the primeVideoReviewPlatform folder
 
 If you use the terminal to display the contents of this folder, you should see a file called manage.py
