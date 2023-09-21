@@ -1,6 +1,6 @@
 import logging
 
-from django.contrib.auth import login, user_login_failed
+from django.contrib.auth import login, user_login_failed, update_session_auth_hash
 
 # This mixin means only authenticated users can access the views that take it in their constructor
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -104,9 +104,20 @@ class UserDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 # Extending Django's built in password change view so we can log if there is an error
 class CustomPasswordChangeView(PasswordChangeView):
+
+    def get_success_url(self):
+        print(self.kwargs)
+        return reverse_lazy('user:detail', kwargs={'pk': self.request.user.id})
+
     def form_invalid(self, form):
         logger.warning('Password change failed for username: ' + form.user.username)
         return super().form_invalid(form)
+
+    def form_valid(self, form):
+        form.save()
+        update_session_auth_hash(self.request, form.user)
+        login(self.request, form.user)
+        return super().form_valid(form)
 
 
 # This method handles the creation of new users
