@@ -38,5 +38,5 @@ RUN apk add --no-cache build-base libffi-dev
 
 # Make sure dependencies are installed
 
-RUN python3 -m pip install -r requirements.txt
+RUN python -m pip install -r requirements.txt
 
