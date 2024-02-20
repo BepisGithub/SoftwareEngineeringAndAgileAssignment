@@ -19,4 +19,4 @@ COPY . /app
 RUN python -m pip install -r requirements.txt
 
 # Command to run the application, adjust the command to use the PORT environment variable provided by Render
-CMD gunicorn SoftwareEngineeringAndAgileAssignment.wsgi:application --bind 0.0.0.0:$LISTEN_PORT
+CMD gunicorn primeVideoReviewPlatform.wsgi:application --bind 0.0.0.0:$LISTEN_PORT
