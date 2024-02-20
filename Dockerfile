@@ -33,10 +33,9 @@ ADD . /app
 RUN chmod g+w /app
 RUN chmod g+w /app/db.sqlite3
 
-#Install build dependencies
-RUN apk add --no-cache build-base libffi-dev
+##Install build dependencies
+#RUN apk add --no-cache build-base libffi-dev
 
 # Make sure dependencies are installed
-
 RUN python -m pip install -r requirements.txt
 
