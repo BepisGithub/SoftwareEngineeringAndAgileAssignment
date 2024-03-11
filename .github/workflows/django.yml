@@ -35,4 +35,5 @@ jobs:
     if: success()
     steps:
     - name: Deploy to Render
-      uses: renderinc/deploy-to-render-action@v1
+      run: |
+        curl -X POST -H 'Authorization: Bearer ${{secrets.API_KEY}}' -H 'Content-Type: application/json' '${{secrets.RENDER_KEY}}'
