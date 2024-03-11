@@ -1,4 +1,10 @@
-# Introduction
+#Built with
+
+This app was built using Django, which is a python web application framework. The frontend uses aspects of CSS boostrap. The service has a docker file to containerize the application to ease deployment. A pipeline has been created with GitHub actions that runs the unit tests and then deploys the application to Render if the tests succeed.
+
+A link to the application hosted on render can be seen here: https://softwareengineeringandagileassignment.onrender.com
+
+# Summary
 A web app was created as a proof of concept to make it easier for users of Prime Video to browse through all the movies and quickly see information about it as well as reviews about it that have been written by other users. Reviews contain information about the movie it was written for, who the review was written by, the score out of five, a title and a message. It also contains the dates of when the review was created and last edited.
 
 There is a navigation bar at the top that is present on all pages, it includes a hyperlink to go to the home page or to login (or logout, if the user is already logged in). On the login page, the user can enter their account details to login, but if they do not have an account, they can click the link on the login page to allow them to register an account.
