@@ -18,7 +18,7 @@ Forms in this application include validation and will display error messages to 
 
 
 An ERD (entity-relationship diagram) can be seen below:
-![img.png](img.png)
+![](img.png)
 
 # Run unit tests
 
@@ -42,16 +42,16 @@ Open the command line and navigate to the primeVideoReviewPlatform folder
 
 If you use the terminal to display the contents of this folder, you should see a file called manage.py
 
-![img.png](README media/img.png)
+![img.png](img2.png)
 
 Run the terminal command 'python manage.py runserver'
 (Note that this project uses python 3.9)
 
-![img.png](README media/img2.png)
+![img.png](img3.png)
 
 The console should output something like below
 
-![img.png](README media/img3.png)
+![img.png](img4.png)
 
 Navigate to the link provided (often is http://127.0.0.1:8000/)
 
