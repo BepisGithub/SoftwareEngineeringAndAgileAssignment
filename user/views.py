@@ -125,9 +125,10 @@ def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
 
-        # We check if the names have digits. The reason we do this manually instead of relying on the error raised by
-        # the clean() method on the user model is that I want this error to be specific to which name is in violation
+        # We check if the names have any digits. The reason we do this manually instead of relying on the error raised
+        # by the clean() method on the user model is that I want this error to be specific to which name is in violation
         # of the rule
+
         first_name = form.data.get('first_name', "")
         last_name = form.data.get('last_name', "")
 
